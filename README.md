@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/unesLam/jikida/main/.github/guardian.png" alt="Jikida guardian" width="220">
+</p>
+
 # Jikida.io — your security layer. Shipped in 30 seconds.
 
 [![Website](https://img.shields.io/badge/site-jikida.io-22c55e)](https://jikida.io)
@@ -24,25 +28,39 @@ Scan your website, apps &amp; GitHub for vulnerabilities. Block attacks &amp; ba
 
 ### Get started — pick your entry point
 
+Every command below sits in its own copy box. Lines that start with `!` are notes, not commands — do not copy those.
+
+**Scan a URL or repo** — no account needed.
+
 ```bash
-# 1. Scan any URL or repo from the terminal (no account needed)
 npx @jikida/scan https://your-app.com
-npx @jikida/scan ./            # scan a local repo for committed secrets
-
-# 2. Add the WAF + SDK to your app (auto-detects your framework)
-npx @jikida/init
-
-# 3. Install a language SDK directly
-npm install @jikida/sdk-node   # composer require jikida/sdk-php · pip install jikida · go get · cargo add …
 ```
 
-**MCP server** for Claude Code / Cursor / Windsurf — add to `~/.claude/mcp.json`:
+! Scan a local repo for committed secrets:
+
+```bash
+npx @jikida/scan ./
+```
+
+**Add the WAF + SDK** — auto-detects your framework.
+
+```bash
+npx @jikida/init
+```
+
+**Install a language SDK** — Node shown; PHP, Python, Go and the rest are in the [SDK table](#sdks--every-language).
+
+```bash
+npm install @jikida/sdk-node
+```
+
+**MCP server** for Claude Code, Cursor and Windsurf — add this to `~/.claude/mcp.json`:
 
 ```json
 { "mcpServers": { "jikida": { "command": "npx", "args": ["-y", "@jikida/mcp"] } } }
 ```
 
-**Agent skill** — copy [`skills/security/SKILL.md`](./skills/security/SKILL.md) into your assistant's skills directory (`.claude/skills/`, Cursor rules, etc.).
+**Agent skill** — copy [`skills/security/SKILL.md`](./skills/security/SKILL.md) into your assistant's skills folder (`.claude/skills/`, Cursor rules, and the like).
 
 Full details for each are below.
 
@@ -67,10 +85,6 @@ One dashboard for a site's whole security posture — protection status, uptime,
 
 - **Uptime & performance** — response-time trend, uptime %, P95 and an incident timeline for every page and API you watch.
 - **API rate-limits & rules** — your SDK auto-detects endpoints from real traffic; approve per-endpoint rate caps and WAF rules, or dismiss the ones you don't need.
-
-![Jikida.io uptime and performance — response-time trend, uptime percentage and incident timeline](https://raw.githubusercontent.com/unesLam/jikida/main/.github/screenshots/uptime-performance.png)
-
-![Jikida.io repository scan — committed secrets, vulnerable dependencies and unsafe CI config, graded with SARIF output](https://raw.githubusercontent.com/unesLam/jikida/main/.github/screenshots/git-scan-report.png)
 
 ---
 
