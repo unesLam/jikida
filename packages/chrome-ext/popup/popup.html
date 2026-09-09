@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="popup.css">
+  <title>Jikida.io</title>
+</head>
+<body>
+  <header class="hd">
+    <div class="brand">
+      <span class="logo" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3z"/></svg>
+      </span>
+      <span class="brand-name">Jikida.io</span>
+    </div>
+    <button id="openPanel" class="ghost" title="Open the full report in a tab">Full report ↗</button>
+  </header>
+
+  <section class="status" id="status">
+    <div class="status-dot" id="statusDot"></div>
+    <div class="status-txt">
+      <p class="status-line" id="statusLine">Ready to scan</p>
+      <p class="status-sub" id="statusSub"></p>
+    </div>
+  </section>
+
+  <div class="actions">
+    <button id="scanBtn" class="btn btn-primary">Scan this page</button>
+    <button id="autoBtn" class="btn">Auto scan (10 pages)</button>
+  </div>
+
+  <div id="intro" class="intro" hidden>
+    <p class="intro-lead">A scan reads this page like an attacker would — no data leaves your browser.</p>
+    <ul class="intro-list">
+      <li><span class="dot"></span>Security headers &amp; TLS (HSTS, CSP, X-Frame)</li>
+      <li><span class="dot"></span>Cookie flags (Secure, HttpOnly, SameSite)</li>
+      <li><span class="dot"></span>Exposed secrets &amp; keys in the page/JS</li>
+      <li><span class="dot"></span>Sensitive files &amp; forms</li>
+    </ul>
+    <p class="intro-hint">Click <b>Scan this page</b> to start. Auto-scan walks up to 10 same-origin pages.</p>
+  </div>
+
+  <div id="progress" class="progress" hidden>
+    <div class="progress-bar"><span id="progressFill"></span></div>
+    <p id="progressTxt" class="progress-txt"></p>
+  </div>
+
+  <div id="summary" class="summary" hidden>
+    <span class="sum-cell sum-fail"><b id="sumFail">0</b><span>high</span></span>
+    <span class="sum-cell sum-warn"><b id="sumWarn">0</b><span>medium</span></span>
+    <span class="sum-cell sum-low"><b id="sumLow">0</b><span>low</span></span>
+    <span class="sum-cell sum-pass"><b id="sumTotal">0</b><span>checks</span></span>
+  </div>
+
+  <ul id="findings" class="findings"></ul>
+
+  <div id="monitorPromo" class="mon-promo" hidden>
+    <p class="mon-promo-h">Watch <span id="monHost">this site</span> for free</p>
+    <div class="mon-row"><span class="mon-ico">◷</span><span><b>Uptime</b> — know the second it goes down</span></div>
+    <div class="mon-row"><span class="mon-ico">⛨</span><span><b>SSL &amp; domain expiry</b> — alert before a cert or domain lapses</span></div>
+    <button id="monConnect" class="btn btn-primary" type="button" style="width:100%;margin-top:10px;">Connect a free account →</button>
+  </div>
+
+  <div id="history" class="history" hidden>
+    <button id="histToggle" class="hist-head" type="button">
+      <span>Recent scans</span>
+      <svg class="hist-chev" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <ul id="histList" class="hist-list" hidden></ul>
+  </div>
+
+  <div class="foot">
+    <button id="viewAll" class="ghost" hidden>View all results ↗</button>
+    <button id="connectBtn" class="ghost">Connect Jikida.io</button>
+  </div>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>

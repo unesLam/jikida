@@ -1,0 +1,51 @@
+{
+  "name": "@jikida/init",
+  "version": "0.1.1",
+  "description": "One command to install a production Web Application Firewall. Detects Node (Next.js / Express / Fastify), PHP (Laravel / Symfony), and Python (Django / FastAPI / Flask), installs the right Jikida SDK, wires the middleware, writes JIKIDA_TOKEN to .env. $0 to start. Fails open. Playground + MCP for Claude Code / Cursor / Windsurf included.",
+  "type": "module",
+  "bin": {
+    "jikida-init": "./bin/init.js"
+  },
+  "main": "./bin/init.js",
+  "files": [
+    "bin",
+    "skill",
+    "README.md"
+  ],
+  "keywords": [
+    "jikida",
+    "jikida.io",
+    "waf",
+    "security",
+    "middleware",
+    "next.js",
+    "express",
+    "fastify",
+    "laravel",
+    "symfony",
+    "django",
+    "flask",
+    "fastapi",
+    "vibe-coding",
+    "ai-security",
+    "sdk",
+    "install",
+    "bootstrap",
+    "init"
+  ],
+  "author": "Jikida (Next Lab LLC) <info@jikida.io> (https://jikida.io)",
+  "license": "MIT",
+  "homepage": "https://jikida.io/install",
+  "bugs": {
+    "url": "https://github.com/unesLam/jikida/issues",
+    "email": "info@jikida.io"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/unesLam/jikida.git",
+    "directory": "packages/init"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,125 @@
+# Composer
+/vendor/
+composer.phar
+
+# Node
+/node_modules/
+npm-debug.log
+yarn-error.log
+
+# Laravel
+/public/hot
+/public/storage
+/public/build/
+/storage/*.key
+/storage/framework/cache/*
+!/storage/framework/cache/.gitignore
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitignore
+/storage/framework/views/*
+!/storage/framework/views/.gitignore
+/storage/framework/testing/*
+!/storage/framework/testing/.gitignore
+/storage/logs/*.log
+/storage/pail/
+/bootstrap/cache/*.php
+!/bootstrap/cache/.gitignore
+
+# Env & secrets
+.env
+.env.backup
+.env.production
+.env.staging
+.ssh-credentials
+!.env.example
+.phpunit.result.cache
+.phpunit.cache/
+auth.json
+
+# OS / editor
+.DS_Store
+._*
+Thumbs.db
+.idea/
+.vscode/
+.zed/
+.fleet/
+.nova/
+.phpactor.json
+
+# Deploy artifacts / mirrors / backups
+/prepare/
+/_backups/
+/jikida.v1/
+/eg/
+/demo-recording.mov
+*.tgz
+*.zip
+*.sql
+*.sql.gz
+
+# Local dev
+/database/*.sqlite
+homestead.yaml
+Homestead.json
+.phpstorm.meta.php
+
+# Boost tooling
+boost.json.local
+
+# IDE / tooling caches shipped from the Jurely clone — not needed in repo
+.claude/
+.cursor/
+.qodo/
+.mcp.json
+
+# Jurely legacy artifacts (anchored to repo root so Laravel blade views
+# in resources/views/mcp/ are still tracked)
+storage/prompts_backup/
+storage/fonts/
+/mcp/
+/mcp-npx/
+/scripts/
+/docs/
+/downloads/
+
+# Documentation cruft — keep README.md only
+*.md
+!README.md
+
+# Sh scripts left over from Jurely deploy
+*.sh
+
+
+# Public repo mirror
+dist-public/
+
+
+# SDK build artifacts
+packages/*/node_modules/
+packages/*/dist/
+
+packages/sdk-java/target/
+resources/views/sites/create.blade.php.bak
+public/website/assets/shots/_orig_fullres/
+public/website/I18N-PLAN.md
+
+# Dead marketing backups — never track/deploy these
+public/website/_backupMarketing/
+public/website-v2/
+public/website/_backup-index-v1.php
+
+# Local deliverables (Chrome extension release, etc.) — never deployed
+/documents/
+
+# Scratchpad: local working files + UI backups, never shipped
+/scratchpad/
+
+# rebrand safety
+/packages/*/node_modules
+*.keystore
+*.jks
+*.p8
+*.p12
+
+packages/mobile/

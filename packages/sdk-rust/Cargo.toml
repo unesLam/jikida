@@ -1,0 +1,17 @@
+[package]
+name = "jikida"
+version = "0.2.0"
+edition = "2021"
+authors = ["Jikida <info@jikida.io>"]
+description = "Jikida Tower layer — fail-open security middleware for axum, warp, actix."
+license = "MIT"
+repository = "https://github.com/unesLam/jikida"
+readme = "README.md"
+keywords = ["security", "waf", "middleware", "axum", "tower"]
+categories = ["web-programming::http-server"]
+
+[dependencies]
+regex = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+ureq = { version = "2", features = ["json"] }

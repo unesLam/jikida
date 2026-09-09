@@ -1,0 +1,323 @@
+# @jikida/mcp
+
+**Give your AI assistant real web-security tools.** The official [Jikida](https://jikida.io) Model Context Protocol server plugs into Claude Code, Cursor, Windsurf, VS Code Copilot, or any assistant that speaks MCP. Deterministic tools, auditable output, safe to run inline — no hallucinated verdicts.
+
+> **Modern security kit for developers & vibe coders.** Scan your website, apps & GitHub for vulnerabilities. Block attacks & bad bots, rate-limit your APIs, monitor uptime, domain & SSL expiry — all in one security platform.
+>
+> 🔎 Scan & pentest · 📈 Monitoring & uptime · 🔔 Instant alerts · 🚦 API rate limits · 🛡️ 360° protection
+
+<p align="center">
+  <img src="https://jikida.io/assets/store/hero-2.png" alt="MCP & security skills for AI coding — vulnerability scanning and secure-development guidance in your CLI" width="88%">
+</p>
+
+*Your security layer. Shipped in 30 seconds.*
+
+```bash
+npx -y @jikida/mcp
+```
+
+Free to start — get a token at [app.jikida.io](https://app.jikida.io/developer).
+
+Scans run through this server surface not just header/TLS grade but **email-security (SPF / DKIM / DMARC)** and compliance-style findings too.
+
+[![Website](https://img.shields.io/badge/site-jikida.io-22c55e)](https://jikida.io)
+[![Playground](https://img.shields.io/badge/playground-playground.jikida.io-38BDF8)](https://playground.jikida.io)
+[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+
+---
+
+## Table of contents
+
+- [Why this exists](#why-this-exists)
+- [Quick install](#quick-install)
+- [Wire it into your assistant](#wire-it-into-your-assistant)
+- [Tools exposed](#tools-exposed)
+- [How the AI actually uses these tools](#how-the-ai-actually-uses-these-tools)
+- [Real workflow examples](#real-workflow-examples)
+- [CLI](#cli)
+- [Comparison with other AI security integrations](#comparison-with-other-ai-security-integrations)
+- [Companion packages](#companion-packages)
+- [FAQ](#faq)
+- [Links](#links)
+
+---
+
+## Why this exists
+
+You are writing code in Cursor / Claude Code / Windsurf. Your AI just added an endpoint that reads a query param, interpolates it into a SQL string, and returns the result. You know it's a SQL-injection surface. Your AI doesn't — and even if it "knows", it has no way to *do* something about it beyond suggesting you add validation.
+
+With `@jikida/mcp` connected, the same AI can now:
+- **Scan the endpoint** you just wrote for real vulnerabilities (via `scan_domain`)
+- **Check security headers** on the site it deploys to (`check_headers`)
+- **See attacks that already hit** the same route on other environments (`list_recent_attacks`)
+- **Guard the code** you just wrote for SQL concat, hardcoded secrets, missing auth (`guard_code`)
+- **Add a WAF rule or block an IP/ASN** in production, with explicit confirmation (`add_waf_rule`, `block_ip` — Pro+)
+- **Explain in plain English** what a WAF verdict means and how to reproduce it (`explain_verdict`)
+
+The MCP server calls no LLM of its own — it runs on **your** AI assistant's credits and enforces your per-site plan quotas (over quota returns a `429` with an `upgrade_url`).
+
+No context switch. No dashboard tab. No "please go check X on jikida.io". The AI stays in your editor and does the work.
+
+## Quick install
+
+```bash
+# Global (recommended for daily use)
+npm install -g @jikida/mcp
+
+# Or per-project via npx
+npx -y @jikida/mcp
+```
+
+**Connect your account** — one-line device-code link. Opens your browser, waits for approval, stores the token at `~/.jikida/config.json`:
+
+```bash
+jikida link
+```
+
+Or set `JIKIDA_TOKEN=df_live_...` in your environment. Either works. Get a token at [app.jikida.io/developer](https://app.jikida.io/developer).
+
+## Wire it into your assistant
+
+### Claude Code
+
+Add to `~/.claude/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "jikida": {
+      "command": "npx",
+      "args": ["-y", "@jikida/mcp"],
+      "env": { "JIKIDA_TOKEN": "df_live_..." }
+    }
+  }
+}
+```
+
+Reload Claude Code. The `jikida` tools appear in the tools list.
+
+### Cursor
+
+Add to `~/.cursor/mcp.json` — same JSON block as Claude Code.
+
+### Windsurf
+
+`~/.codeium/windsurf/mcp_config.json` — same JSON block.
+
+### VS Code (Copilot Chat)
+
+Command palette → *MCP: Add Server* → paste the block. Or edit `~/.vscode/mcp.json` directly.
+
+### Any other stdio-MCP client
+
+`@jikida/mcp` is a plain stdio server. Any transport that speaks MCP works.
+
+## Tools exposed
+
+| Tool | Free | Pro | Max | What it does |
+|---|---|---|---|---|
+| `scan_domain` | ✅ 10/mo | ✅ 100/mo | ✅ ∞ | Pentest scan of any public URL. Returns grade A-F + failing checks — headers, TLS, cookies, exposed `.env`/`.git`, **email security (SPF / DKIM / DMARC)**, and compliance-style findings. On an **onboarded Max/Agency site** it runs the **deep environment pentest** — active probes against your live infra (version-CVE fingerprint, subdomain-takeover, expanded exposure pack, GraphQL introspection, reflected-origin CORS, open-redirect, reflected-XSS) on top of the surface scan. |
+| `check_headers` | ✅ | ✅ | ✅ | TLS grade, HSTS, CSP, X-Frame-Options, Referrer-Policy, Permissions-Policy in one call. |
+| `list_sites` | ✅ | ✅ | ✅ | Every site under your account with plan + last-scan + coverage status. |
+| `list_monitors` | ✅ | ✅ | ✅ | Every uptime monitor + latest status + last-checked timestamp. |
+| `list_recent_attacks` | ✅ 7d | ✅ 30d | ✅ 90d | Recent WAF + honeypot events from the last N hours (rule, IP, path, action). |
+| `list_recent_scans` | ✅ | ✅ | ✅ | Your recent pentest + repo/vibe scans, with target, grade, and pass/warn/fail counts — including the email-security and compliance sections. |
+| `explain_verdict` | ✅ | ✅ | ✅ | Plain-English explanation of a WAF verdict or rule: what it catches, how attackers use it, how to reproduce, how to mitigate. |
+| `add_waf_rule` | ❌ | ✅ 25 rules | ✅ ∞ | Add a custom WAF rule (pattern, target, action) to a site you own. Requires explicit confirmation. |
+| `block_ip` | ❌ | ✅ | ✅ | Block a specific IP or ASN across sites you own. Requires explicit confirmation. |
+| `run_vibe_scan` | ❌ | ✅ 20/mo | ✅ ∞ | Vibe-coder scan of a public URL: exposed secrets, open S3 buckets, Supabase RLS off, wide-open Firebase rules. |
+| `scan_repo` | ✅ | ✅ | ✅ | Bring-your-own-repo SAST + secrets scan of a public `github.com/{org}/{repo}`. Probes the default branch for `.env`, `firebase-adminsdk*.json`, `serviceAccountKey.json` and 13 secret-family patterns; cross-references pinned deps against OSV (known CVEs); flags **dead/unused dependencies** and **inert MCP config**, typosquatted/hallucinated packages, insecure Dockerfiles, and CI-workflow secret leaks. High-signal **dangerous-sink** detection catches the AI-slop patterns a linter waves through: `eval()`/shell-exec on request data, disabled TLS verification, wide-open CORS, debug mode left on, unsafe deserialization (`pickle.loads`/`unserialize`/`yaml.load`), and raw-HTML XSS sinks. Static only — never runs the repo. |
+| `guard_code` | ✅ | ✅ | ✅ | Reactive SAST on a code snippet. Catches hardcoded secrets (Stripe/GitHub/GitLab/Slack tokens, AWS `AKIA` keys, Google `AIza` keys, PEM private keys), SQL string concat, missing input validation, missing rate limits on auth, client-side authorization, prompt injection, wildcard permissions, open CORS, **disabled TLS verification**, **unsafe deserialization**, dynamic eval, and XSS sinks. Run after every security-sensitive edit. |
+| `check_s3_bucket` | ✅ | ✅ | ✅ | Probe a public S3 bucket for world-readable / world-listable access. Returns a grade + the HEAD/LIST status. |
+| `get_security_preferences` | ✅ | ✅ | ✅ | Read the user's saved cross-session preferences (e.g. `never_scan_production_without_ask`, `always_block_env_probes`). |
+| `set_security_preference` | ✅ | ✅ | ✅ | Save a preference the user asked the AI to remember across sessions. |
+| `list_cves` | ✅ 100/day | ✅ 100/day | ✅ 100/day | Look up known CVEs affecting a package via osv.dev. Supports npm, PyPI, Packagist, Go, RubyGems, crates.io, Maven, NuGet. |
+| `pentest_status` | ✅ | ✅ | ✅ | Status of a pentest run (or the most recent one). Useful for polling while a long scan runs. |
+
+All read tools are always safe. Write tools (`add_waf_rule`, `block_ip`, `set_security_preference`) require explicit user approval — every MCP-compatible client shows an approval dialog before running them, and the server never auto-applies changes. Write tools are also plan-gated: the server returns a `429` with an `upgrade_url` when the token's plan doesn't cover the tool.
+
+## How the AI actually uses these tools
+
+The MCP server exposes each tool with a rich JSON schema that includes:
+- The exact parameters the tool needs (with descriptions the AI can read)
+- Examples of expected input
+- What the return value looks like
+
+Because MCP is a standardized protocol, the AI reads these schemas on connect and knows how to call every tool without any prompt engineering. You don't need to teach Claude what `scan_domain` does — it reads the description.
+
+## Real workflow examples
+
+<details>
+<summary><strong>1. AI writes an endpoint, you ask "is this safe?"</strong></summary>
+
+```
+You: I just wrote /api/users?id=... in Express. Is it safe?
+
+Claude Code: Let me check what Jikida would catch.
+
+  → Called scan_domain({ url: "https://staging.myapp.com/api/users?id=1" })
+  ← Grade B. HSTS missing. No exposed .env. SQL-injection surface not
+     directly testable without live payload — the WAF would catch a UNION
+     SELECT via the sqli.union rule but your app doesn't validate `id`
+     as a number, so a live attacker could still enumerate rows.
+
+  → Called list_recent_attacks({ hours: 24 })
+  ← 47 SQL-injection attempts blocked on your other sites in the last 24h.
+     Common pattern: 1' OR '1'='1
+
+Recommendation: add strict validation `id: z.number().int().positive()`
+before the query. Managed WAF already blocks the common `UNION SELECT` /
+`OR 1=1` payloads; add custom rules from your dashboard if you need more.
+Want me to add the validation?
+```
+
+</details>
+
+<details>
+<summary><strong>2. Guarding a fix before you ship it</strong></summary>
+
+```
+You: I just wrote this login handler — check it before I commit.
+
+Claude Code:
+  → Called guard_code({
+      language: "js",
+      code: "const q = `SELECT * FROM users WHERE email='${email}'`; ..."
+    })
+  ← 2 findings:
+     • HIGH  sql-concat — user input interpolated into a SQL string.
+       Use a parameterized query instead.
+     • MED   no-rate-limit — auth handler has no per-IP throttle.
+
+Fix the SQL concat with a prepared statement and I'll add a rate limiter
+before you commit. Want me to apply both?
+```
+
+</details>
+
+<details>
+<summary><strong>3. Post-mortem on a WAF verdict</strong></summary>
+
+```
+You: A user complained their request got blocked. What happened?
+
+Claude Code:
+  → Called list_recent_attacks({ hours: 2 })
+  ← 1 result: verdict=block, rule=xss.script_tag,
+     url=/api/comments?body=<script>alert(1)</script>,
+     ip=203.0.113.45, ua=Mozilla/5.0 (Macintosh...)
+
+  → Called explain_verdict({ verdict_id: "xss.script_tag" })
+  ← This rule blocks any request whose body or query contains a literal
+     `<script>` tag. Common false-positive: a developer testing XSS payloads
+     against their own site. The rule's target is `body|query` and it
+     doesn't inspect the Accept header, so JSON POSTs with escaped
+     `<script>` strings (e.g. `"body": "<script>"`) will trigger too.
+
+The user was testing an XSS payload against their own comments. Rule
+worked correctly. Recommend: they should test against playground.jikida.io
+instead, which is designed for this.
+```
+
+</details>
+
+## CLI
+
+```bash
+jikida link       # connect this device to your Jikida account (browser flow)
+jikida whoami     # print the linked account
+jikida status     # ping the Jikida edge, confirm the SDK API is reachable
+jikida help       # list every command
+jikida logout     # remove ~/.jikida/config.json
+```
+
+## Comparison with other AI security integrations
+
+| Feature | @jikida/mcp | Snyk MCP | Nuclei via MCP | Semgrep MCP |
+|---|---|---|---|---|
+| Live WAF integration | ✅ | ❌ | ❌ | ❌ |
+| Reads real production attack logs | ✅ | ❌ | ❌ | ❌ |
+| Guards your code before you ship | ✅ | ⚠️ SAST only | ❌ | ✅ |
+| Explains verdicts in plain English | ✅ | ⚠️ CVE lookup | ❌ | ⚠️ Rule description |
+| Runs pentest scanner | ✅ | ⚠️ SAST only | ✅ | ⚠️ SAST only |
+| Runs vibe-coder / secret scan | ✅ | ✅ | ⚠️ | ✅ |
+| Uptime monitoring | ✅ | ❌ | ❌ | ❌ |
+| Free tier | ✅ | ⚠️ Limited | ✅ | ⚠️ Limited |
+| Zero-config on install | ✅ | ⚠️ | ⚠️ | ⚠️ |
+
+Jikida is the only MCP-integrated tool that combines *runtime* protection with the AI's *design-time* knowledge.
+
+## Companion packages
+
+| Package | Registry | Purpose |
+|---|---|---|
+| [`@jikida/scan`](https://www.npmjs.com/package/@jikida/scan) | npm | Template-based CLI scanner. `npx @jikida/scan <url>` — runs from your machine (no WAF to configure), SARIF for CI |
+| [`@jikida/init`](https://www.npmjs.com/package/@jikida/init) | npm | One-command bootstrap that installs the right Jikida SDK for your framework |
+| [`@jikida/sdk-node`](https://www.npmjs.com/package/@jikida/sdk-node) | npm | Node / Bun / Deno WAF SDK |
+| [`jikida/sdk-php`](https://packagist.org/packages/jikida/sdk-php) | Packagist | PHP 8.2+ SDK (Laravel, Symfony, plain PHP) |
+
+Python, Go, Ruby, Rust, Java, and .NET SDKs are in development — scaffolds live in the [public repo](https://github.com/unesLam/jikida), not yet published to their registries.
+
+Beyond the registries: the [**Jikida.io Connector**](https://wordpress.org/plugins/jikida-connector/) WordPress plugin (local hardening + one-click managed WAF, live on WordPress.org) and the [**Jikida Alerts**](https://play.google.com/store/apps/details?id=io.jikida.alerts) mobile app ([jikida.io/website-monitor-app](https://jikida.io/website-monitor-app) — call-style **Alarm** notifications that ring through silent mode / DND until acknowledged, per-site per-event Off/Notification/Alarm) round out the ecosystem.
+
+## Environment
+
+| Variable | Default | Notes |
+|---|---|---|
+| `JIKIDA_TOKEN` | — | API key. Auto-loaded from `~/.jikida/config.json` after `jikida link`. |
+| `JIKIDA_API` | `https://mcp.jikida.io` | Override the MCP-facing endpoint for self-hosted setups. |
+| `JIKIDA_API_PATH` | `/api/mcp` | Override the tool path prefix for self-hosted setups. |
+
+## FAQ
+
+<details>
+<summary><strong>Does it modify my code?</strong></summary>
+
+No. The MCP server reads your Jikida account and runs scans. Any *code* change is done by your AI assistant, not by the server. The server itself never touches your filesystem beyond `~/.jikida/config.json`.
+</details>
+
+<details>
+<summary><strong>Does the AI see my attack logs?</strong></summary>
+
+Only when you ask it to (e.g. "check recent attacks"). The AI cannot poll — every call is initiated by your prompt. Log payloads are truncated to safe lengths (URL 500 chars, body 200 chars).
+</details>
+
+<details>
+<summary><strong>Does it change anything without asking me?</strong></summary>
+
+No. Only `add_waf_rule`, `block_ip`, and `set_security_preference` write anything — they are marked as "write" tools in the MCP schema, so every MCP-compatible client shows an explicit confirmation dialog before running them. The server also enforces your per-site plan quota and returns a `429` with an `upgrade_url` when a tool is over quota or above your plan tier.
+</details>
+
+<details>
+<summary><strong>What about rate limits?</strong></summary>
+
+Same as the Jikida API: read tools are capped per-day per IP (resets midnight UTC), write tools plan-gated. `scan_domain` uses a separate MCP-scan quota — metered apart from the dashboard pentest quota because these scans run on your own AI/compute. The monthly quota scales with your plan (Free / Pro / Max).
+</details>
+
+<details>
+<summary><strong>Can I use it without a Jikida account?</strong></summary>
+
+Four tools work with no token at all: `scan_domain` (1 quick scan/day per IP, top findings only), `check_headers`, `guard_code`, and `check_s3_bucket` — each with a reduced per-day guest cap. Everything else requires a token.
+</details>
+
+## Links
+
+- Marketing: [jikida.io](https://jikida.io)
+- App: [app.jikida.io](https://app.jikida.io)
+- MCP endpoint: [mcp.jikida.io](https://mcp.jikida.io)
+- Playground: [playground.jikida.io](https://playground.jikida.io)
+- WordPress plugin: [Jikida.io Connector](https://wordpress.org/plugins/jikida-connector/)
+- Mobile app: [Jikida Alerts on Google Play](https://play.google.com/store/apps/details?id=io.jikida.alerts)
+- Docs: [jikida.io/docs](https://jikida.io/docs)
+- Threat map: [jikida.io/threats](https://jikida.io/threats)
+- Source: [github.com/unesLam/jikida](https://github.com/unesLam/jikida)
+- Issues: [github.com/unesLam/jikida/issues](https://github.com/unesLam/jikida/issues)
+- Contact: info@jikida.io
+
+## License
+
+MIT © Jikida
+
+---
+
+**Keywords** — model context protocol · MCP · Claude Code · Cursor · Windsurf · VS Code Copilot · codex · AI security · vibe coder security · agentic security · WAF · pentest · security scanner · vibe coder tools · web application firewall · attack logs · uptime monitoring · Jikida · OWASP · SQL injection · XSS · CSRF · SSRF · path traversal · XXE · brute force · credential stuffing · bot detection · deception · honeypot · Cloudflare wrap · edge security · Next.js security · Laravel security · Django security · FastAPI security · Rails security · Go security · Rust security · Node security · PHP security · Python security

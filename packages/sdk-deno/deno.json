@@ -1,0 +1,9 @@
+{
+  "name": "@jikida/sdk-deno",
+  "version": "0.2.0",
+  "description": "Jikida fail-open WAF SDK for Deno (Deno.serve, Fresh, Oak).",
+  "exports": "./mod.ts",
+  "imports": {
+    "@jikida/sdk-node": "npm:@jikida/sdk-node@^0.2.0"
+  }
+}

@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+
+    <PackageId>Jikida</PackageId>
+    <Version>0.1.1</Version>
+    <Authors>Jikida</Authors>
+    <Company>Next Lab LLC</Company>
+    <Description>Fail-open WAF middleware for ASP.NET Core. One line of setup adds managed WAF, rate limits and bot detection; if Jikida is unreachable your app keeps serving.</Description>
+    <PackageProjectUrl>https://jikida.io</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/unesLam/jikida</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>waf;security;aspnetcore;middleware;ratelimit;bot-detection</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="../README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+</Project>

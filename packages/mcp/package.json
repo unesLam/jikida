@@ -1,0 +1,56 @@
+{
+  "name": "@jikida/mcp",
+  "version": "0.1.0",
+  "description": "Jikida MCP server for Claude Code, Cursor, Windsurf, and VS Code. Gives your AI assistant real security tools — scan any domain, check security headers, list uptime monitors, explain WAF verdicts. Deterministic, auditable, and safe to run inline.",
+  "type": "module",
+  "bin": {
+    "jikida": "./src/cli.js",
+    "jikida-mcp": "./src/index.js"
+  },
+  "main": "./src/index.js",
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "claude",
+    "claude-code",
+    "cursor",
+    "windsurf",
+    "codex",
+    "vscode",
+    "ai-security",
+    "waf",
+    "security",
+    "pentest",
+    "vibe-coder",
+    "jikida",
+    "jikida.io",
+    "web-application-firewall",
+    "ddos",
+    "bot-detection",
+    "honeypot",
+    "site-security",
+    "developer-tools"
+  ],
+  "author": "Jikida <info@jikida.io> (https://jikida.io)",
+  "license": "MIT",
+  "homepage": "https://jikida.io/mcp",
+  "bugs": {
+    "url": "https://github.com/unesLam/jikida/issues",
+    "email": "info@jikida.io"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/unesLam/jikida.git",
+    "directory": "packages/mcp"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  }
+}

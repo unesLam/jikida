@@ -1,0 +1,36 @@
+{
+    "name": "jikida/sdk-php",
+    "description": "Jikida PHP SDK — WAF, uptime, and attack-log middleware for Laravel and Symfony. Fails open.",
+    "type": "library",
+    "keywords": ["jikida", "waf", "security", "middleware", "laravel", "symfony"],
+    "homepage": "https://jikida.io",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jikida",
+            "email": "info@jikida.io"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "psr/http-message": "^1.1 || ^2.0",
+        "guzzlehttp/guzzle": "^7.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0 || ^11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Jikida\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Jikida\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "minimum-stability": "stable"
+}

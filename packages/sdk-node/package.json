@@ -1,0 +1,78 @@
+{
+  "name": "@jikida/sdk-node",
+  "version": "0.1.0",
+  "description": "Jikida Node.js SDK — fail-open WAF, bot detection, and attack-log middleware for Express, Fastify, and Next.js. One line, always on. If Jikida is unreachable, your app keeps serving.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./express": {
+      "types": "./dist/express.d.ts",
+      "import": "./dist/express.js"
+    },
+    "./fastify": {
+      "types": "./dist/fastify.d.ts",
+      "import": "./dist/fastify.js"
+    },
+    "./next": {
+      "types": "./dist/next.d.ts",
+      "import": "./dist/next.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "node --test test/*.test.js"
+  },
+  "keywords": [
+    "jikida",
+    "jikida.io",
+    "waf",
+    "web-application-firewall",
+    "security",
+    "middleware",
+    "express",
+    "fastify",
+    "nextjs",
+    "next.js",
+    "bot-detection",
+    "ddos",
+    "attack-logs",
+    "owasp",
+    "sql-injection",
+    "xss",
+    "path-traversal",
+    "fails-open",
+    "vibe-coder",
+    "cursor",
+    "claude"
+  ],
+  "author": "Jikida <info@jikida.io> (https://jikida.io)",
+  "license": "MIT",
+  "homepage": "https://jikida.io/install",
+  "bugs": {
+    "url": "https://github.com/unesLam/jikida/issues",
+    "email": "info@jikida.io"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/unesLam/jikida.git",
+    "directory": "packages/sdk-node"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "@types/node": "^20.0.0"
+  }
+}

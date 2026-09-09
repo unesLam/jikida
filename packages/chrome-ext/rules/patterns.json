@@ -1,0 +1,308 @@
+{
+  "version": 2,
+  "updated": "2026-09-01",
+  "note": "Local-first detection patterns. Bundled with the extension and refreshed from jikida.io/extension/patterns.json (cached 24h). v2 adds malware/skimmer JS, runtime-config disclosure, and more secret families. Each secret pattern is scoped so intentionally-public client keys are labelled correctly.",
+  "secrets": [
+    {
+      "id": "aws-access-key",
+      "label": "AWS access key ID",
+      "regex": "\\bAKIA[0-9A-Z]{16}\\b",
+      "severity": "critical",
+      "public_ok": false,
+      "note": "An AWS access key ID in client code almost always means the matching secret key is nearby or was committed. Rotate immediately."
+    },
+    {
+      "id": "aws-secret",
+      "label": "Possible AWS secret access key",
+      "regex": "aws_secret_access_key['\"\\s:=]+([A-Za-z0-9/+]{40})",
+      "severity": "critical",
+      "public_ok": false
+    },
+    {
+      "id": "google-api-key",
+      "label": "Google API key",
+      "regex": "\\bAIza[0-9A-Za-z\\-_]{35}\\b",
+      "severity": "medium",
+      "public_ok": true,
+      "note": "Google Maps/JS keys are meant to be public. Severity depends on restrictions: an UNRESTRICTED key (no HTTP-referrer / API limits) can be abused and billed to you. We flag it as an exposure to verify, not a confirmed leak."
+    },
+    {
+      "id": "firebase-config",
+      "label": "Firebase web config",
+      "regex": "apiKey['\"\\s:=]+['\"]AIza[0-9A-Za-z\\-_]{35}['\"]",
+      "severity": "low",
+      "public_ok": true,
+      "note": "Firebase web config is public by design. Real risk is weak Firestore/Storage security rules \u2014 check whether data is readable without auth."
+    },
+    {
+      "id": "supabase-url",
+      "label": "Supabase project URL",
+      "regex": "https://[a-z0-9]{20}\\.supabase\\.co",
+      "severity": "info",
+      "public_ok": true,
+      "note": "The Supabase URL + anon key are public by design. The risk is misconfigured Row Level Security \u2014 verify whether tables are readable with only the anon key."
+    },
+    {
+      "id": "supabase-service-role",
+      "label": "Supabase SERVICE ROLE key (should never be in the browser)",
+      "regex": "\"role\"\\s*:\\s*\"service_role\"",
+      "severity": "critical",
+      "public_ok": false,
+      "note": "The service_role JWT bypasses Row Level Security. It must NEVER reach the browser. If present, treat every row as fully exposed."
+    },
+    {
+      "id": "stripe-secret",
+      "label": "Stripe SECRET key",
+      "regex": "\\bsk_live_[0-9a-zA-Z]{24,}\\b",
+      "severity": "critical",
+      "public_ok": false
+    },
+    {
+      "id": "stripe-restricted",
+      "label": "Stripe restricted key",
+      "regex": "\\brk_live_[0-9a-zA-Z]{24,}\\b",
+      "severity": "high",
+      "public_ok": false
+    },
+    {
+      "id": "stripe-pub",
+      "label": "Stripe publishable key",
+      "regex": "\\bpk_live_[0-9a-zA-Z]{24,}\\b",
+      "severity": "info",
+      "public_ok": true,
+      "note": "Publishable keys are meant for the client. No action needed."
+    },
+    {
+      "id": "github-token",
+      "label": "GitHub token",
+      "regex": "\\bgh[pousr]_[0-9A-Za-z]{36,}\\b",
+      "severity": "critical",
+      "public_ok": false
+    },
+    {
+      "id": "slack-token",
+      "label": "Slack token",
+      "regex": "\\bxox[baprs]-[0-9A-Za-z-]{10,}\\b",
+      "severity": "high",
+      "public_ok": false
+    },
+    {
+      "id": "openai-key",
+      "label": "OpenAI API key",
+      "regex": "\\bsk-[A-Za-z0-9]{20}T3BlbkFJ[A-Za-z0-9]{20}\\b",
+      "severity": "critical",
+      "public_ok": false
+    },
+    {
+      "id": "anthropic-key",
+      "label": "Anthropic API key",
+      "regex": "\\bsk-ant-[A-Za-z0-9\\-_]{90,}\\b",
+      "severity": "critical",
+      "public_ok": false
+    },
+    {
+      "id": "private-key-block",
+      "label": "Private key block (RSA/EC/PGP)",
+      "regex": "-----BEGIN (?:RSA |EC |OPENSSH |DSA |PGP )?PRIVATE KEY-----",
+      "severity": "critical",
+      "public_ok": false
+    },
+    {
+      "id": "jwt",
+      "label": "JSON Web Token",
+      "regex": "\\beyJ[A-Za-z0-9_-]{10,}\\.[A-Za-z0-9_-]{10,}\\.[A-Za-z0-9_-]{10,}\\b",
+      "severity": "low",
+      "public_ok": true,
+      "note": "A JWT in client code is often the user's own session token (normal). Flagged as info unless it decodes to a privileged/service role."
+    },
+    {
+      "id": "sendgrid",
+      "label": "SendGrid API key",
+      "regex": "\\bSG\\.[A-Za-z0-9_-]{22}\\.[A-Za-z0-9_-]{43}\\b",
+      "severity": "high",
+      "public_ok": false
+    },
+    {
+      "id": "twilio-sid",
+      "label": "Twilio account SID",
+      "regex": "\\bAC[a-f0-9]{32}\\b",
+      "severity": "medium",
+      "public_ok": false
+    },
+    {
+      "id": "mailgun",
+      "label": "Mailgun API key",
+      "regex": "\\bkey-[0-9a-zA-Z]{32}\\b",
+      "severity": "high",
+      "public_ok": false
+    },
+    {
+      "id": "generic-secret-assign",
+      "label": "Hard-coded secret/password assignment",
+      "regex": "(?:secret|password|passwd|api[_-]?key|access[_-]?token|auth[_-]?token)['\"\\s]*[:=]\\s*['\"][^'\"\\s]{8,}['\"]",
+      "severity": "medium",
+      "public_ok": false,
+      "note": "Heuristic: a key/secret assigned a literal string in client JS. Needs verification \u2014 may be a placeholder or a real credential."
+    },
+    {
+      "id": "gh-pat",
+      "label": "GitHub personal access token",
+      "regex": "\\bghp_[A-Za-z0-9]{36}\\b",
+      "severity": "critical",
+      "public_ok": false,
+      "note": "A GitHub PAT grants repo access. Rotate it and move it server-side."
+    }
+  ],
+  "sensitive_paths": [
+    {
+      "path": "/.env",
+      "label": ".env file",
+      "severity": "critical"
+    },
+    {
+      "path": "/.env.local",
+      "label": ".env.local file",
+      "severity": "critical"
+    },
+    {
+      "path": "/.env.production",
+      "label": ".env.production file",
+      "severity": "critical"
+    },
+    {
+      "path": "/.git/config",
+      "label": ".git/config (repo exposed)",
+      "severity": "high"
+    },
+    {
+      "path": "/.git/HEAD",
+      "label": ".git/HEAD (repo exposed)",
+      "severity": "high"
+    },
+    {
+      "path": "/config.json",
+      "label": "config.json",
+      "severity": "medium"
+    },
+    {
+      "path": "/wp-config.php.bak",
+      "label": "WordPress config backup",
+      "severity": "critical"
+    },
+    {
+      "path": "/backup.sql",
+      "label": "SQL backup",
+      "severity": "critical"
+    },
+    {
+      "path": "/.DS_Store",
+      "label": ".DS_Store (directory listing)",
+      "severity": "low"
+    },
+    {
+      "path": "/phpinfo.php",
+      "label": "phpinfo() page",
+      "severity": "medium"
+    },
+    {
+      "path": "/.svn/entries",
+      "label": ".svn (repo exposed)",
+      "severity": "high"
+    },
+    {
+      "path": "/docker-compose.yml",
+      "label": "docker-compose.yml",
+      "severity": "medium"
+    }
+  ],
+  "security_headers": [
+    {
+      "id": "strict-transport-security",
+      "name": "Strict-Transport-Security",
+      "severity": "medium",
+      "why": "Without HSTS a first request can be downgraded to HTTP and intercepted."
+    },
+    {
+      "id": "content-security-policy",
+      "name": "Content-Security-Policy",
+      "severity": "medium",
+      "why": "CSP is the strongest defence against XSS. Missing means injected scripts run freely."
+    },
+    {
+      "id": "x-content-type-options",
+      "name": "X-Content-Type-Options",
+      "severity": "low",
+      "why": "Stops MIME sniffing that can turn an upload into executable script."
+    },
+    {
+      "id": "x-frame-options",
+      "name": "X-Frame-Options",
+      "severity": "low",
+      "why": "Prevents clickjacking by disallowing your page inside a frame (or use CSP frame-ancestors)."
+    },
+    {
+      "id": "referrer-policy",
+      "name": "Referrer-Policy",
+      "severity": "low",
+      "why": "Controls how much of your URL leaks to other sites in the Referer header."
+    },
+    {
+      "id": "permissions-policy",
+      "name": "Permissions-Policy",
+      "severity": "info",
+      "why": "Locks down powerful browser features (camera, geolocation) your app doesn't use."
+    }
+  ],
+  "malware_js": [
+    {
+      "id": "crypto-miner",
+      "label": "Crypto-miner script",
+      "regex": "(coinhive|coin-hive|cryptonight|crypto-?loot|jsecoin|minero\\.cc|webminepool|deepMiner|CoinImp)",
+      "severity": "critical",
+      "note": "Crypto-mining JavaScript hijacks visitor CPUs. If you didn't add this, the site may be compromised."
+    },
+    {
+      "id": "card-skimmer",
+      "label": "Possible card skimmer",
+      "regex": "(querySelector(All)?\\([^)]*(card|cc-?num|cvv|cvc|ccnumber)|addEventListener\\([^)]*(submit|keydown)[^)]*(card|checkout))",
+      "severity": "critical",
+      "note": "Code hooking payment fields is a Magecart-style skimmer pattern. Review immediately if you take payments."
+    },
+    {
+      "id": "obfuscated-payload",
+      "label": "Obfuscated/packed JS payload",
+      "regex": "eval\\(\\s*(atob|unescape|String\\.fromCharCode|function\\(p,a,c,k,e)",
+      "severity": "high",
+      "note": "Packed/obfuscated eval payloads are a common malware delivery pattern. Verify the source of this script."
+    },
+    {
+      "id": "cookie-exfil",
+      "label": "Cookie exfiltration",
+      "regex": "(new Image\\(\\)\\.src|fetch|sendBeacon|XMLHttpRequest)[^;]{0,120}document\\.cookie",
+      "severity": "high",
+      "note": "Sending document.cookie to a network endpoint can leak sessions. Confirm this is a legitimate analytics call."
+    }
+  ],
+  "config_paths": [
+    {
+      "path": "/env-config.js",
+      "label": "Runtime env config (window._env_)",
+      "severity": "high"
+    },
+    {
+      "path": "/config.js",
+      "label": "Public config.js",
+      "severity": "medium"
+    },
+    {
+      "path": "/app-config.json",
+      "label": "Public app-config.json",
+      "severity": "medium"
+    },
+    {
+      "path": "/appsettings.json",
+      "label": ".NET appsettings.json exposed",
+      "severity": "high"
+    }
+  ]
+}
