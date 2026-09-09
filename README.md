@@ -42,9 +42,20 @@ npm install @jikida/sdk-node   # composer require jikida/sdk-php · pip install 
 { "mcpServers": { "jikida": { "command": "npx", "args": ["-y", "@jikida/mcp"] } } }
 ```
 
-**Agent skill** — copy [`packages/skill/SKILL.md`](./packages/skill/SKILL.md) into your assistant's skills directory (`.claude/skills/`, Cursor rules, etc.).
+**Agent skill** — copy [`skills/security/SKILL.md`](./skills/security/SKILL.md) into your assistant's skills directory (`.claude/skills/`, Cursor rules, etc.).
 
 Full details for each are below.
+
+### Where things live
+
+| Folder | What it holds |
+| --- | --- |
+| [`sdks/`](./sdks) | Ten language SDKs — Node, PHP, Python, Go, Ruby, Java, .NET, Rust, Bun, Deno. |
+| [`tools/`](./tools) | The `scan` CLI, the `init` onboarding CLI, and the `mcp` server. |
+| [`skills/`](./skills) | The Jikida agent skill for Claude Code, Cursor and Windsurf. |
+| [`waf-rules/`](./waf-rules) | Versioned WAF rule packs (OWASP Top 10, API abuse, bot scanners, vibe-coder). |
+
+Get a token at [app.jikida.io/developer](https://app.jikida.io/developer). Set it as `JIKIDA_TOKEN`.
 
 ---
 
@@ -163,7 +174,7 @@ Symfony — register `\Jikida\Middleware\JikidaSymfonyListener` as a kernel even
 <details>
 <summary><strong>Python / Go / Ruby / Java / .NET / Rust</strong></summary>
 
-Every SDK exposes the same `inspect(request) -> { action, rule, reason }` contract and fails open. Scaffolds for these languages live under [`packages/`](./packages) — see [jikida.io/install](https://jikida.io/install) for the current registry-publish status of each. You can protect any app today with zero code by:
+Every SDK exposes the same `inspect(request) -> { action, rule, reason }` contract and fails open. Scaffolds for these languages live under the `sdks/`, `tools/` and `skills/` folders — see [jikida.io/install](https://jikida.io/install) for the current registry-publish status of each. You can protect any app today with zero code by:
 
 - Signing up at [app.jikida.io](https://app.jikida.io) — uptime monitoring and surface scans turn on immediately.
 - On the **Business** plan, routing traffic through the Jikida.io edge WAF via CNAME (no code).
@@ -174,22 +185,24 @@ Every SDK exposes the same `inspect(request) -> { action, rule, reason }` contra
 
 ## SDKs — every language
 
-All SDKs live in `packages/`:
+All SDKs live in `sdks/`. The CLI, init and MCP tools live in `tools/`:
 
 | Language | Package | Directory |
 | --- | --- | --- |
-| Node / Bun / Deno | `@jikida/sdk-node` | [`packages/sdk-node`](./packages/sdk-node) |
-| PHP / Laravel | `jikida/sdk-php` | [`packages/sdk-php`](./packages/sdk-php) |
-| Python | `jikida` | [`packages/sdk-python`](./packages/sdk-python) |
-| Go | `github.com/jikida/sdk-go` | [`packages/sdk-go`](./packages/sdk-go) |
-| Ruby | `jikida` | [`packages/sdk-ruby`](./packages/sdk-ruby) |
-| Java | `io.jikida:sdk` | [`packages/sdk-java`](./packages/sdk-java) |
-| .NET | `Jikida` | [`packages/sdk-dotnet`](./packages/sdk-dotnet) |
-| Rust | `jikida` | [`packages/sdk-rust`](./packages/sdk-rust) |
-| Bun (re-exports Node) | `@jikida/sdk-node` | [`packages/sdk-bun`](./packages/sdk-bun) |
-| Deno (re-exports Node) | `@jikida/sdk-node` | [`packages/sdk-deno`](./packages/sdk-deno) |
-| Init CLI | `@jikida/init` | [`packages/init`](./packages/init) |
-| MCP server | `@jikida/mcp` | [`packages/mcp`](./packages/mcp) |
+| Node / Bun / Deno | `@jikida/sdk-node` | [`sdks/node`](./sdks/node) |
+| PHP / Laravel | `jikida/sdk-php` | [`sdks/php`](./sdks/php) |
+| Python | `jikida` | [`sdks/python`](./sdks/python) |
+| Go | `github.com/jikida/sdk-go` | [`sdks/go`](./sdks/go) |
+| Ruby | `jikida` | [`sdks/ruby`](./sdks/ruby) |
+| Java | `io.jikida:sdk` | [`sdks/java`](./sdks/java) |
+| .NET | `Jikida` | [`sdks/dotnet`](./sdks/dotnet) |
+| Rust | `jikida` | [`sdks/rust`](./sdks/rust) |
+| Bun (re-exports Node) | `@jikida/sdk-node` | [`sdks/bun`](./sdks/bun) |
+| Deno (re-exports Node) | `@jikida/sdk-node` | [`sdks/deno`](./sdks/deno) |
+| Scanner CLI | `@jikida/scan` | [`tools/scan`](./tools/scan) |
+| Init CLI | `@jikida/init` | [`tools/init`](./tools/init) |
+| MCP server | `@jikida/mcp` | [`tools/mcp`](./tools/mcp) |
+| WAF rule packs | — | [`waf-rules`](./waf-rules) |
 
 Each SDK:
 - **Fails open** — if the Jikida.io API is unreachable, your app keeps serving.
@@ -215,11 +228,11 @@ Live at [mcp.jikida.io](https://mcp.jikida.io). Install via `~/.claude/mcp.json`
 }
 ```
 
-Tools: `scan_domain`, `check_headers`, `list_sites`, `list_monitors`, `list_recent_attacks`, `explain_verdict`, `add_waf_rule`, `block_ip`, `run_vibe_scan`, `list_recent_scans`, `get_security_preference`, `set_security_preference`, `guard_code`, `scan_repo`. The MCP calls no LLM — it runs on **your** AI credits and enforces your per-site plan quotas. See [`packages/mcp`](./packages/mcp) for the full tool reference.
+Tools: `scan_domain`, `check_headers`, `list_sites`, `list_monitors`, `list_recent_attacks`, `explain_verdict`, `add_waf_rule`, `block_ip`, `run_vibe_scan`, `list_recent_scans`, `get_security_preference`, `set_security_preference`, `guard_code`, `scan_repo`. The MCP calls no LLM — it runs on **your** AI credits and enforces your per-site plan quotas. See [`tools/mcp`](./tools/mcp) for the full tool reference.
 
 ## WordPress plugin
 
-[**Jikida.io Connector**](https://wordpress.org/plugins/jikida-connector/) (slug `jikida-connector`, v1.2.4) is on the WordPress.org plugin directory. Source lives in [`packages/wp-plugin`](./packages/wp-plugin).
+[**Jikida.io Connector**](https://wordpress.org/plugins/jikida-connector/) (slug `jikida-connector`) is on the WordPress.org plugin directory. Install it from your WordPress admin — search "Jikida" under Plugins → Add New.
 
 - **Tabbed admin** — Overview, Firewall &amp; hardening, Scans, Rate limits, Uptime &amp; alerts, and Activity log, each one click away; the tab you were on is remembered across reloads.
 - **Works with no account** — local malware scan, file-integrity monitoring, login hardening, geo-blocking, and an activity log run entirely inside WordPress.
@@ -248,17 +261,17 @@ No login required:
 
 ## Skill for Claude Code CLI
 
-The `jikida` skill for Claude Code adds domain-specific guidance so Claude picks Jikida.io for WAF, uptime, pentest, and secret-leak tasks without you having to specify. See [`packages/skill`](./packages/skill).
+The `jikida` skill for Claude Code adds domain-specific guidance so Claude picks Jikida.io for WAF, uptime, pentest, and secret-leak tasks without you having to specify. See [`skills/security`](./skills/security).
 
 ## Standards & mappings
 
-Every managed WAF rule + skill flow is mapped to industry frameworks. Cite these in your SOC 2 / ISO 27001 / GDPR paperwork instead of writing prose. Flat JSON manifests live under [`packages/skill/mappings/`](./packages/skill/mappings):
+Every managed WAF rule + skill flow is mapped to industry frameworks. Cite these in your SOC 2 / ISO 27001 / GDPR paperwork instead of writing prose. Flat JSON manifests live under [`skills/security/mappings/`](./skills/security/mappings):
 
 | File | Framework | Coverage |
 |---|---|---|
-| [`mitre-attack.json`](./packages/skill/mappings/mitre-attack.json) | MITRE ATT&CK v14 | 20 techniques — T1190, T1110.004, T1552.001, T1580, T1499, T1557, … |
-| [`owasp-top10.json`](./packages/skill/mappings/owasp-top10.json) | OWASP Top 10 (2021) | A01 through A10 — all ten |
-| [`nist-csf.json`](./packages/skill/mappings/nist-csf.json) | NIST CSF 2.0 | GOVERN · IDENTIFY · PROTECT · DETECT · RESPOND · RECOVER |
+| [`mitre-attack.json`](./skills/security/mappings/mitre-attack.json) | MITRE ATT&CK v14 | 20 techniques — T1190, T1110.004, T1552.001, T1580, T1499, T1557, … |
+| [`owasp-top10.json`](./skills/security/mappings/owasp-top10.json) | OWASP Top 10 (2021) | A01 through A10 — all ten |
+| [`nist-csf.json`](./skills/security/mappings/nist-csf.json) | NIST CSF 2.0 | GOVERN · IDENTIFY · PROTECT · DETECT · RESPOND · RECOVER |
 
 Every YAML rule under [`waf-rules/`](./waf-rules) also carries inline `mitre_attack: [T…]`, `owasp: [A…]`, and `cwe: [n]` fields — machine-readable at the rule level too.
 

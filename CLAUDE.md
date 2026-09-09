@@ -6,12 +6,12 @@ Guidance for Claude Code and other AI assistants working in this repository.
 
 This is the public, open-source distribution for **Jikida** — a developer-first security platform (web and app pentest, code and dependency scanning, secret detection, uptime monitoring, and a managed WAF). The hosted service lives at https://jikida.io; this repo holds the client-side pieces developers install and run:
 
-- **Language SDKs** — thin, fail-open guard clients for ten runtimes (`packages/sdk-node`, `sdk-python`, `sdk-php`, `sdk-go`, `sdk-ruby`, `sdk-java`, `sdk-rust`, `sdk-dotnet`, `sdk-bun`, `sdk-deno`).
-- **CLI scanner** — `packages/scan`, a standalone template-driven scanner (SARIF and JSON output, CI fail-on gates).
-- **Project init** — `packages/init`, the `@jikida/init` one-command onboarding.
-- **MCP server** — `packages/mcp`, a Model Context Protocol server exposing Jikida tools to AI IDEs.
-- **WordPress plugin** — `packages/wp-plugin`, the Jikida Connector.
-- **Agent skill** — `packages/skill`, a portable skill definition.
+- **Language SDKs** — thin, fail-open guard clients for ten runtimes under `sdks/` (`node`, `python`, `php`, `go`, `ruby`, `java`, `rust`, `dotnet`, `bun`, `deno`).
+- **CLI scanner** — `tools/scan`, a standalone template-driven scanner (SARIF and JSON output, CI fail-on gates).
+- **Project init** — `tools/init`, the `@jikida/init` one-command onboarding.
+- **MCP server** — `tools/mcp`, a Model Context Protocol server exposing Jikida tools to AI IDEs.
+- **Agent skill** — `skills/security`, a portable skill definition.
+- **WAF rule packs** — `waf-rules/`, versioned rule sets in a portable format.
 
 The hosted application, database, billing, and scan engine are **not** in this repository.
 
@@ -27,30 +27,29 @@ These are hard constraints. Preserve them in any change.
 ## Repository layout
 
 ```
-packages/
-  sdk-node/ sdk-python/ sdk-php/ ...   # one directory per language SDK
-  scan/                               # CLI scanner (templates + engine)
-  init/                               # @jikida/init onboarding
-  mcp/                                # MCP server for AI IDEs
-  wp-plugin/                          # WordPress connector
-  skill/                              # portable agent skill
-README.md                             # the developer-facing overview
+sdks/       node/ python/ php/ go/ ruby/ java/ rust/ dotnet/ bun/ deno/
+tools/      scan/    # CLI scanner (templates + engine)
+            init/    # @jikida/init onboarding
+            mcp/     # MCP server for AI IDEs
+skills/     security/    # portable agent skill (SKILL.md + framework mappings)
+waf-rules/  owasp-top10/ api-abuse/ bot-scanners/ vibe-coder/
+README.md   # the developer-facing overview
 ```
 
-Each package under `packages/` is self-contained and versioned independently. Read that package's own `README.md` and manifest (`package.json`, `composer.json`, `pyproject.toml`, `go.mod`, `Cargo.toml`, `*.csproj`, `*.gemspec`, `pom.xml`) before changing it.
+Each package under `sdks/`, `tools/` and `skills/` is self-contained and versioned independently. Read that package's own `README.md` and manifest (`package.json`, `composer.json`, `pyproject.toml`, `go.mod`, `Cargo.toml`, `*.csproj`, `*.gemspec`, `pom.xml`) before changing it.
 
 ## Development commands
 
 Commands depend on the package you are in. Determine the toolchain from the manifest, then use its conventions:
 
-- **Node / Bun / Deno** (`sdk-node`, `sdk-bun`, `sdk-deno`, `scan`, `init`, `mcp`): `npm install`, `npm test`, `npm run build`.
-- **Python** (`sdk-python`): install with the declared build backend, run `pytest`.
-- **PHP** (`sdk-php`, `wp-plugin`): `composer install`, `composer test`.
-- **Go** (`sdk-go`): `go build ./...`, `go test ./...`.
-- **Ruby** (`sdk-ruby`): `bundle install`, `bundle exec rspec`.
-- **Java** (`sdk-java`): `mvn verify`.
-- **Rust** (`sdk-rust`): `cargo build`, `cargo test`.
-- **.NET** (`sdk-dotnet`): `dotnet build`, `dotnet test`.
+- **Node / Bun / Deno** (`sdks/node`, `sdks/bun`, `sdks/deno`, `tools/scan`, `tools/init`, `tools/mcp`): `npm install`, `npm test`, `npm run build`.
+- **Python** (`sdks/python`): install with the declared build backend, run `pytest`.
+- **PHP** (`sdks/php`): `composer install`, `composer test`.
+- **Go** (`sdks/go`): `go build ./...`, `go test ./...`.
+- **Ruby** (`sdks/ruby`): `bundle install`, `bundle exec rspec`.
+- **Java** (`sdks/java`): `mvn verify`.
+- **Rust** (`sdks/rust`): `cargo build`, `cargo test`.
+- **.NET** (`sdks/dotnet`): `dotnet build`, `dotnet test`.
 
 Run only the affected package's tests. Do not add a dependency or change a published version number unless the task explicitly calls for it.
 
