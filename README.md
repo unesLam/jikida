@@ -33,6 +33,10 @@ One dashboard for a site's whole security posture — protection status, uptime,
 - **Uptime & performance** — response-time trend, uptime %, P95 and an incident timeline for every page and API you watch.
 - **API rate-limits & rules** — your SDK auto-detects endpoints from real traffic; approve per-endpoint rate caps and WAF rules, or dismiss the ones you don't need.
 
+![Jikida.io uptime and performance — response-time trend, uptime percentage and incident timeline](https://raw.githubusercontent.com/unesLam/jikida/main/.github/screenshots/uptime-performance.png)
+
+![Jikida.io repository scan — committed secrets, vulnerable dependencies and unsafe CI config, graded with SARIF output](https://raw.githubusercontent.com/unesLam/jikida/main/.github/screenshots/git-scan-report.png)
+
 ---
 
 ## Table of contents
