@@ -2,7 +2,9 @@
   <img src="https://raw.githubusercontent.com/unesLam/jikida/main/.github/guardian.png" alt="Jikida guardian" width="220">
 </p>
 
-# Jikida.io — your security layer. Shipped in 30 seconds.
+# Web &amp; App Pentest, Security &amp; Code Scanning
+
+> **Jikida.io — your security layer. Shipped in 30 seconds.** Security for AI IDEs, agentic coding, and vibe-coded apps.
 
 [![Website](https://img.shields.io/badge/site-jikida.io-22c55e)](https://jikida.io)
 [![App](https://img.shields.io/badge/app-app.jikida.io-0A0A0A)](https://app.jikida.io)
@@ -14,15 +16,15 @@
 [![Google Play](https://img.shields.io/badge/Google%20Play-Jikida%20Alerts-34A853)](https://play.google.com/store/apps/details?id=io.jikida.alerts)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-## Modern security kit for developers &amp; vibe coders
+## Pentest &amp; scan for developers, AI IDEs &amp; vibe coders
 
-Scan your website, apps &amp; GitHub for vulnerabilities. Block attacks &amp; bad bots, rate-limit your APIs, monitor uptime, domain &amp; SSL expiry — all in one security platform.
+Pentest and scan websites, web apps, code and GitHub for vulnerabilities and exposed keys. Secure vibe-coded apps, monitor uptime, SSL and domains, and rate-limit APIs. One platform.
 
-**Scan &amp; pentest** · **Monitoring &amp; uptime** · **Instant alerts** · **API rate limits** · **360° protection** · **MCP &amp; SDKs**
+**Website &amp; app pentest** · **Code &amp; repo scan** · **Deep pentest** · **MCP for AI IDEs** · **Agentic &amp; vibe-coded security** · **SDKs**
 
 ---
 
-**Jikida.io** is a developer-first web security SaaS. Managed WAF, uptime monitoring, quick pentest (headers, TLS, **email security** — SPF/DKIM/DMARC — and compliance-style findings), vibe-coder scan, repo/secret scan, Cloudflare DDoS wrap, bot detection, active deception, and file-upload scanning — installed in **one line** for Node, PHP/Laravel, Python, Go, Ruby, Java, .NET, Rust, Bun, or Deno.
+**Jikida.io** is a developer-first security platform. The core is **pentest and scanning**: it pentests your live website and app, scans your code and connected GitHub/GitLab/Bitbucket repos for exposed secrets and vulnerable dependencies, runs a deeper authenticated pentest, and plugs into your **AI IDE** (Claude Code, Cursor, Windsurf) over **MCP** so it guides agentic and vibe-coded work to write secure code and catches mistakes before they ship. Uptime, SSL &amp; domain monitoring, a managed WAF, and a compliance generator come bundled as complementary extras — installed in **one line** for Node, PHP/Laravel, Python, Go, Ruby, Java, .NET, Rust, Bun, or Deno.
 
 **Your security layer. Shipped in 30 seconds.** One line — `npx @jikida/init` — and every SDK fails open, so if Jikida.io is ever down your app keeps serving.
 
