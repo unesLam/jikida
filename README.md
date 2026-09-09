@@ -22,6 +22,30 @@ Scan your website, apps &amp; GitHub for vulnerabilities. Block attacks &amp; ba
 
 **Your security layer. Shipped in 30 seconds.** One line — `npx @jikida/init` — and every SDK fails open, so if Jikida.io is ever down your app keeps serving.
 
+### Get started — pick your entry point
+
+```bash
+# 1. Scan any URL or repo from the terminal (no account needed)
+npx @jikida/scan https://your-app.com
+npx @jikida/scan ./            # scan a local repo for committed secrets
+
+# 2. Add the WAF + SDK to your app (auto-detects your framework)
+npx @jikida/init
+
+# 3. Install a language SDK directly
+npm install @jikida/sdk-node   # composer require jikida/sdk-php · pip install jikida · go get · cargo add …
+```
+
+**MCP server** for Claude Code / Cursor / Windsurf — add to `~/.claude/mcp.json`:
+
+```json
+{ "mcpServers": { "jikida": { "command": "npx", "args": ["-y", "@jikida/mcp"] } } }
+```
+
+**Agent skill** — copy [`packages/skill/SKILL.md`](./packages/skill/SKILL.md) into your assistant's skills directory (`.claude/skills/`, Cursor rules, etc.).
+
+Full details for each are below.
+
 ---
 
 ## See it in action
