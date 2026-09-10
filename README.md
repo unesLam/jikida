@@ -118,20 +118,36 @@ Jikida.io removes three specific frictions:
 2. **Downside risk** — every SDK is fail-open. If Jikida.io is down, your app keeps serving. You lose protection, not availability.
 3. **Cost** — there's a real free tier that protects a hobby project. Plans and current pricing live at [jikida.io](https://jikida.io).
 
+## How it compares
+
+A quick, honest sketch of where Jikida.io sits next to tools you may already know. Each is good at what it does; Jikida.io bundles the app-layer pieces a small team would otherwise wire together.
+
+| | **Jikida.io** | **Cloudflare** | **Snyk** | **UptimeRobot** |
+| --- | --- | --- | --- | --- |
+| Managed WAF | Yes, app-layer + custom rules | Yes, network edge | No | No |
+| On-demand pentest & site scan | Yes | No | No | No |
+| Repo / code & dependency scan | Yes | No | Yes | No |
+| Uptime + SSL / domain expiry | Yes | Partial | No | Yes |
+| MCP server for AI editors | Yes | No | No | No |
+| One-line SDK, fails open | Yes | N/A (DNS/proxy) | N/A (CI) | N/A |
+| Free tier | Yes | Yes | Yes | Yes |
+
+Runs happily *behind* Cloudflare, and complements a CI scanner like Snyk rather than replacing it.
+
 ## What's inside
 
 | Layer | What it does |
 | --- | --- |
 | Managed WAF | OWASP Top 10 + CRS + your custom rules. Auto-detects APIs, applies per-route limits, caches safe GETs at the edge. |
-| Uptime monitoring | 15-min free, 1-min Pro, 30-sec Business. Public status page. Email + Slack + Discord + Telegram + webhook + mobile push on down/up. |
-| Quick pentest | On-demand surface scan: headers, TLS, cookies, exposed `.env` / `.git`, **email security (SPF / DKIM / DMARC)**, and compliance-style findings. A/B/C/D/F grade. |
+| Uptime monitoring | Multi-region checks, faster intervals on higher plans. Public status page. Email + Slack + Discord + Telegram + webhook + mobile push on down/up. |
+| Quick pentest | On-demand surface scan: headers, TLS, cookies, exposed `.env` / `.git`, **email security (SPF / DKIM / DMARC)**, and compliance-style findings, each with a clear fix. |
 | Vibe-coder scan | Catches the mistakes vibe-coded projects tend to ship: exposed secrets, open S3 buckets, Supabase RLS off, wide-open Firebase rules. |
 | Cloudflare DDoS wrap | One-click attach + per-site Under-Attack toggle. |
 | Bot detection | UA classification, headless-browser challenges, per-IP rate limits, ASN allowlist for Google/Bing. |
 | Active deception | Serves plausible fakes to verified attackers. Fingerprint logged, real error message hidden. |
 | Upload scanning | MIME + magic bytes + polyglot detection + optional ClamAV. |
 | CVE feed | Live feed from NVD, tagged with which Jikida.io rule covers each entry. |
-| Real-time logs | Full context per attack (IP, ASN, country, payload, route, verdict). 7 days free, 30 Pro, 90 Business. |
+| Real-time logs | Full context per attack (IP, ASN, country, payload, route, verdict). Retention grows with your plan. |
 | MCP server | Claude Code, Cursor, Windsurf, VS Code get real security tools. Scan, monitor, block from AI chat. |
 | WordPress plugin | [Jikida.io Connector](https://wordpress.org/plugins/jikida-connector/) — local malware scan, file integrity, login hardening, geo-block, activity log with no account; one-click connect for managed WAF + attack log + uptime + CVE lookups. |
 | Mobile app | [Jikida Alerts](https://play.google.com/store/apps/details?id=io.jikida.alerts) on Google Play — call-style **Alarm** notifications that ring through silent mode / DND until you acknowledge. iOS coming soon. |
@@ -193,7 +209,7 @@ Symfony — register `\Jikida\Middleware\JikidaSymfonyListener` as a kernel even
 Every SDK exposes the same `inspect(request) -> { action, rule, reason }` contract and fails open. Scaffolds for these languages live under the `sdks/`, `tools/` and `skills/` folders — see [jikida.io/install](https://jikida.io/install) for the current registry-publish status of each. You can protect any app today with zero code by:
 
 - Signing up at [app.jikida.io](https://app.jikida.io) — uptime monitoring and surface scans turn on immediately.
-- On the **Business** plan, routing traffic through the Jikida.io edge WAF via CNAME (no code).
+- On the **Max** plan, routing traffic through the Jikida.io edge WAF via CNAME (no code).
 
 </details>
 
