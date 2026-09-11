@@ -2,16 +2,26 @@
   <img src="https://raw.githubusercontent.com/unesLam/jikida/main/.github/guardian.png" alt="Jikida guardian" width="220">
 </p>
 
-# Web &amp; App Pentest, Security &amp; Code Scanning
+<h1 align="center">Jikida.io</h1>
+<p align="center"><b>The hosted AI pentester for people who ship — not just security engineers.</b><br>
+Pentest your live app, scan your repo, protect it with a WAF, and watch its uptime. One account. No Docker, no LLM key, free tier.</p>
 
-> **Jikida.io — your security layer. Shipped in 30 seconds.** Security for AI IDEs, agentic coding, and vibe-coded apps.
+<p align="center">
+<a href="https://jikida.io"><img src="https://img.shields.io/badge/site-jikida.io-E01F26" alt="site"></a>
+<a href="https://mcp.jikida.io"><img src="https://img.shields.io/badge/MCP-20_AI_tools-A855F7" alt="mcp"></a>
+<a href="#sdks--every-language"><img src="https://img.shields.io/badge/SDKs-10_languages-0A0A0A" alt="sdks"></a>
+<a href="https://www.npmjs.com/package/@jikida/scan"><img src="https://img.shields.io/npm/v/@jikida/scan?label=%40jikida%2Fscan&color=cb3837" alt="npm scan"></a>
+<a href="https://packagist.org/packages/jikida/sdk-php"><img src="https://img.shields.io/packagist/v/jikida/sdk-php?label=jikida%2Fsdk-php&color=777bb4" alt="packagist"></a>
+<a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-3b82f6" alt="license"></a>
+</p>
 
-[![Website](https://img.shields.io/badge/site-jikida.io-22c55e)](https://jikida.io)
-[![App](https://img.shields.io/badge/app-app.jikida.io-0A0A0A)](https://app.jikida.io)
-[![MCP](https://img.shields.io/badge/mcp-mcp.jikida.io-A855F7)](https://mcp.jikida.io)
-[![npm @jikida/sdk-node](https://img.shields.io/npm/v/@jikida/sdk-node?label=%40jikida.io%2Fsdk-node)](https://www.npmjs.com/package/@jikida/sdk-node)
-[![Packagist jikida/sdk-php](https://img.shields.io/packagist/v/jikida/sdk-php?label=jikida%2Fsdk-php)](https://packagist.org/packages/jikida/sdk-php)
-[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+<p align="center">
+<b><a href="#why-jikida-beats-the-other-security-tools">Why it beats Nuclei / Strix / Shannon ↓</a></b> ·
+<a href="#quick-install-30-seconds">Install</a> ·
+<a href="#mcp-server-for-ai-ides">MCP</a> ·
+<a href="#sdks--every-language">SDKs</a> ·
+<a href="https://jikida.io/compare">Compare</a>
+</p>
 
 **Install it, scan it, or plug it into your AI editor:**
 
@@ -55,22 +65,22 @@ Pentest and scan websites, web apps, code and GitHub for vulnerabilities and exp
 
 ## Why Jikida beats the other security tools
 
-The best open-source security tools are **deep but narrow** — pentest-only, self-hosted, and they make you bring your own LLM key. Jikida is the only one that does the deep work **and** hosts it, runs without a key, and adds a WAF, uptime and repo scan the pentest-only tools skip.
+The strongest open-source security tools are **deep but narrow** — pentest-only, self-hosted, bring-your-own-LLM-key. Jikida does the deep work **and** hosts it, runs with no key of your own, and adds a WAF, uptime and repo scan the pentest-only tools skip. ✅ full · ⚠️ partial · ❌ none.
 
-| | **Jikida.io** | **Nuclei** | **Strix** | **Shannon** | **Snyk** | **Cloudflare** |
-| --- | :---: | :---: | :---: | :---: | :---: | :---: |
-| Live-app pentest with real exploit | ✅ | matches only | ✅ | ✅ | ❌ | ❌ |
-| SAST + DAST (code **and** running app) | ✅ | DAST only | ✅ | ✅ | SAST only | ❌ |
-| Repo secret + CVE (OSV) scan | ✅ | ❌ | partial | deps | ✅ | ❌ |
+| | Jikida | Nuclei | Strix | Shannon | Snyk | Cloudflare |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| Live-app pentest with real exploit | ✅ | ⚠️&nbsp;match | ✅ | ✅ | ❌ | ❌ |
+| SAST + DAST (code **and** live app) | ✅ | ⚠️&nbsp;DAST | ✅ | ✅ | ⚠️&nbsp;SAST | ❌ |
+| Repo secret + CVE (OSV) scan | ✅ | ❌ | ⚠️ | ⚠️ | ✅ | ❌ |
 | Managed WAF (blocks live attacks) | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| Uptime + SSL / domain monitoring | ✅ | ❌ | ❌ | ❌ | ❌ | partial |
-| **Hosted — no Docker, no self-host** | ✅ | cloud tier | ❌ | ❌ | ✅ | ✅ |
-| **No LLM key to bring** | ✅ | ✅ (no AI) | ❌ BYOK | ❌ BYOK | ✅ | ✅ |
-| Install: CLI + Docker + one-line `npx` | ✅ all | CLI | Docker | npx | CLI | DNS |
-| MCP tools in your AI editor | ✅ | ❌ | ❌ | via Claude | ❌ | ❌ |
+| Uptime + SSL / domain monitoring | ✅ | ❌ | ❌ | ❌ | ❌ | ⚠️ |
+| **Hosted — no Docker, no self-host** | ✅ | ⚠️&nbsp;cloud | ❌ | ❌ | ✅ | ✅ |
+| **Runs with no LLM key of yours** | ✅ | ✅ | ❌&nbsp;BYOK | ❌&nbsp;BYOK | ✅ | ✅ |
+| Install: CLI + Docker + `npx` | ✅&nbsp;all | ⚠️&nbsp;CLI | ⚠️&nbsp;Docker | ⚠️&nbsp;npx | ⚠️&nbsp;CLI | ⚠️&nbsp;DNS |
+| MCP tools in your AI editor | ✅ | ❌ | ❌ | ⚠️ | ❌ | ❌ |
 | Free tier, no card | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 
-The one axis where the AI pentesters go deeper today is raw exploitation — and that's exactly what we're building toward with a source-to-exploit deep pentest ([the plan](https://jikida.io/compare)). Everywhere else, a solo builder who shipped with Cursor last week wins with Jikida: nothing to self-host, no key to buy, and the whole stack in one account. Per-tool breakdowns: [nuclei](https://jikida.io/compare/nuclei-alternative) · [strix](https://jikida.io/compare/strix-alternative) · [shannon](https://jikida.io/compare/shannon-alternative) · [snyk](https://jikida.io/compare/snyk-alternative) · [cloudflare](https://jikida.io/compare/cloudflare-alternative).
+The one axis the AI pentesters still go deeper on is raw exploitation — exactly what our [source-to-exploit deep pentest](https://jikida.io/compare) is closing. Everywhere else, the builder who shipped with Cursor last week wins with Jikida: nothing to self-host, no key to buy, the whole stack in one account. Full breakdowns: [nuclei](https://jikida.io/compare/nuclei-alternative) · [strix](https://jikida.io/compare/strix-alternative) · [shannon](https://jikida.io/compare/shannon-alternative) · [snyk](https://jikida.io/compare/snyk-alternative) · [cloudflare](https://jikida.io/compare/cloudflare-alternative).
 
 ---
 
