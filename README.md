@@ -321,6 +321,7 @@ No login required:
 - **Free vulnerability / virus scanner** — [jikida.io/website-app-virus-vulnerability-scanner-online-free](https://jikida.io/website-app-virus-vulnerability-scanner-online-free)
 - **Uptime monitoring** — [jikida.io/website-apps-uptime-monitoring](https://jikida.io/website-apps-uptime-monitoring)
 - **Website monitor mobile app** — [jikida.io/website-monitor-app](https://jikida.io/website-monitor-app)
+- **Chrome extension** — scan any site (including behind your login) from the toolbar — [Chrome Web Store](https://chromewebstore.google.com/detail/website-web-app-security/mapepdjgolcmkcnhhmlbkfobbaapkcli)
 
 ## Anthropic Security Skill for Claude Code
 
