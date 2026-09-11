@@ -118,7 +118,7 @@ npm install @jikida/sdk-node
 { "mcpServers": { "jikida": { "command": "npx", "args": ["-y", "@jikida/mcp"] } } }
 ```
 
-**Agent skill** — copy [`skills/security/SKILL.md`](./skills/security/SKILL.md) into your assistant's skills folder (`.claude/skills/`, Cursor rules, and the like).
+**Agent skills** — copy the [`skills/`](./skills) folder into your assistant's skills folder (`.claude/skills/`, Cursor rules, and the like). Three skills: **security**, **clean-code**, **UX design** — see [the table below](#anthropic-agent-skills--ship-secure-non-sloppy-apps).
 
 Full details for each are below.
 
@@ -318,9 +318,17 @@ No login required:
 - **Website monitor mobile app** — [jikida.io/website-monitor-app](https://jikida.io/website-monitor-app)
 - **Chrome extension** — scan any site (including behind your login) from the toolbar — [Chrome Web Store](https://chromewebstore.google.com/detail/website-web-app-security/mapepdjgolcmkcnhhmlbkfobbaapkcli)
 
-## Anthropic Security Skill for Claude Code
+## Anthropic Agent Skills — ship secure, non-sloppy apps
 
-The `jikida` skill is an **Anthropic-format Agent Skill** — drop it in `.claude/skills/` and Claude Code auto-loads Jikida's security guidance. It teaches Claude to reach for Jikida.io on WAF, uptime, pentest, repo-scan and secret-leak tasks without you having to spell it out, and to run the MCP tools safely inline. It pairs with the MCP server above: the skill is the *judgement* (when + how to secure), the MCP is the *hands* (the actual scan/pentest/block tools). See [`skills/security`](./skills/security).
+Three **Anthropic-format Agent Skills** you drop in `.claude/skills/` (or Cursor rules). Together they turn AI-generated code into an app you'd be proud to ship — secure, maintainable, and usable. Each activates on its own triggers; use them together.
+
+| Skill | What it does | Folder |
+| --- | --- | --- |
+| **Security** | Reaches for Jikida on WAF, uptime, pentest, repo-scan and secret-leak tasks; runs the MCP tools safely inline; maps findings to OWASP / MITRE / NIST. The *judgement* to the MCP's *hands*. | [`skills/security`](./skills/security) |
+| **Clean code** | Refactors and de-slops what an AI editor generated — naming, duplication, god-functions, dead code, error handling — without over-engineering. SOLID/DRY/YAGNI with judgement. | [`skills/clean-code`](./skills/clean-code) |
+| **UX design** | Applies proven UX laws (Hick's, Fitts's, Jakob's, Miller's, aesthetic-usability) + clear ASD-STE100 UI copy, so generated UIs read as intentional, not generic. | [`skills/ux-design`](./skills/ux-design) |
+
+The split is deliberate: **secure code can still be slop, and a beautiful UI can still ship a secret in the bundle.** Run all three, plus a Jikida scan, before you ship. English + UI copy across all three follow **ASD-STE100** (Simplified Technical English) — one idea per sentence, active voice, say what the control does.
 
 ## Standards & mappings
 
