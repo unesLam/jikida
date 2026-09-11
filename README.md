@@ -9,11 +9,8 @@
 [![Website](https://img.shields.io/badge/site-jikida.io-22c55e)](https://jikida.io)
 [![App](https://img.shields.io/badge/app-app.jikida.io-0A0A0A)](https://app.jikida.io)
 [![MCP](https://img.shields.io/badge/mcp-mcp.jikida.io-A855F7)](https://mcp.jikida.io)
-[![Playground](https://img.shields.io/badge/playground-playground.jikida.io-38BDF8)](https://playground.jikida.io)
 [![npm @jikida/sdk-node](https://img.shields.io/npm/v/@jikida/sdk-node?label=%40jikida.io%2Fsdk-node)](https://www.npmjs.com/package/@jikida/sdk-node)
 [![Packagist jikida/sdk-php](https://img.shields.io/packagist/v/jikida/sdk-php?label=jikida%2Fsdk-php)](https://packagist.org/packages/jikida/sdk-php)
-[![WordPress plugin](https://img.shields.io/wordpress/plugin/v/jikida-connector?label=wp%20plugin)](https://wordpress.org/plugins/jikida-connector/)
-[![Google Play](https://img.shields.io/badge/Google%20Play-Jikida%20Alerts-34A853)](https://play.google.com/store/apps/details?id=io.jikida.alerts)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 **Install it, scan it, or plug it into your AI editor:**
@@ -24,12 +21,11 @@ npx @jikida/scan      # pentest any site or repo from your terminal
 npx -y @jikida/mcp    # security tools inside Claude Code, Cursor, Windsurf
 ```
 
-```text
-     ██ ██ ██  ██ ██ █████   ████
+<pre><code><span style="color:#E01F26">     ██ ██ ██  ██ ██ █████   ████
      ██ ██ ██ ██  ██ ██  ██ ██  ██
      ██ ██ ████   ██ ██  ██ ██████
   ██ ██ ██ ██ ██  ██ ██  ██ ██  ██
-   ███  ██ ██  ██ ██ █████  ██  ██
+   ███  ██ ██  ██ ██ █████  ██  ██</span>
  pentest · repo scan · uptime · alerts        https://jikida.io
 
  → scanning example.com …
@@ -41,7 +37,7 @@ npx -y @jikida/mcp    # security tools inside Claude Code, Cursor, Windsurf
    MEDIUM    Cookie without Secure flag   session               CWE-614
 
  Every finding has a fix. Full report: https://app.jikida.io
-```
+</code></pre>
 
 ## Pentest &amp; scan for developers, AI IDEs &amp; vibe coders
 
@@ -124,9 +120,6 @@ One dashboard for a site's whole security posture — protection status, uptime,
 - [Quick install](#quick-install-30-seconds)
 - [SDKs — every language](#sdks--every-language)
 - [MCP server for AI IDEs](#mcp-server-for-ai-ides)
-- [WordPress plugin](#wordpress-plugin)
-- [Mobile app — Jikida Alerts](#mobile-app--jikida-alerts)
-- [Playground](#playground---fire-attacks-at-a-live-sdk-protected-origin)
 - [Free tools](#free-tools)
 - [Skill for Claude Code](#skill-for-claude-code-cli)
 - [Standards & mappings](#standards--mappings)
@@ -176,8 +169,6 @@ Runs happily *behind* Cloudflare, and complements a CI scanner like Snyk rather 
 | CVE feed | Live feed from NVD, tagged with which Jikida.io rule covers each entry. |
 | Real-time logs | Full context per attack (IP, ASN, country, payload, route, verdict). Retention grows with your plan. |
 | MCP server | Claude Code, Cursor, Windsurf, VS Code get real security tools. Scan, monitor, block from AI chat. |
-| WordPress plugin | [Jikida.io Connector](https://wordpress.org/plugins/jikida-connector/) — local malware scan, file integrity, login hardening, geo-block, activity log with no account; one-click connect for managed WAF + attack log + uptime + CVE lookups. |
-| Mobile app | [Jikida Alerts](https://play.google.com/store/apps/details?id=io.jikida.alerts) on Google Play — call-style **Alarm** notifications that ring through silent mode / DND until you acknowledge. iOS coming soon. |
 | Alert integrations | Mobile push, email (primary + 3 CCs), Slack, Discord, Telegram, generic webhook. Fires on down/up, attack burst, plan limit. |
 
 ---
@@ -289,27 +280,6 @@ Live at [mcp.jikida.io](https://mcp.jikida.io). Install via `~/.claude/mcp.json`
 
 Tools: `scan_domain`, `check_headers`, `list_sites`, `list_monitors`, `list_recent_attacks`, `explain_verdict`, `add_waf_rule`, `block_ip`, `run_vibe_scan`, `list_recent_scans`, `get_security_preference`, `set_security_preference`, `guard_code`, `scan_repo`. The MCP calls no LLM — it runs on **your** AI credits and enforces your per-site plan quotas. See [`tools/mcp`](./tools/mcp) for the full tool reference.
 
-## WordPress plugin
-
-[**Jikida.io Connector**](https://wordpress.org/plugins/jikida-connector/) (slug `jikida-connector`) is on the WordPress.org plugin directory. Install it from your WordPress admin — search "Jikida" under Plugins → Add New.
-
-- **Tabbed admin** — Overview, Firewall &amp; hardening, Scans, Rate limits, Uptime &amp; alerts, and Activity log, each one click away; the tab you were on is remembered across reloads.
-- **Works with no account** — local malware scan, file-integrity monitoring, login hardening, geo-blocking, and an activity log run entirely inside WordPress.
-- **One-click connect** — link a Jikida.io account to add managed WAF, the real-time attack log, uptime monitoring, and CVE lookups on top.
-
-## Mobile app — Jikida Alerts
-
-[**Jikida Alerts**](https://play.google.com/store/apps/details?id=io.jikida.alerts) (bundle `io.jikida.alerts`) is **live on Google Play**. **iOS coming soon.** Marketing page: [jikida.io/website-monitor-app](https://jikida.io/website-monitor-app).
-
-- **Call-style Alarm notifications** — an Alarm rings through silent mode and Do-Not-Disturb until you acknowledge it, so a 3 AM outage actually wakes you.
-- **Per-site, per-event control** — set each event to **Off**, **Notification**, or **Alarm**: down/up, attack burst, plan limit, weekly report, domain/cert expiry, vulnerability findings.
-- **Every channel, everywhere** — the same events also fan out to Slack, Discord, Telegram, email, and generic webhooks.
-- **Connect in seconds** — pair a phone with a 6-character code or QR from [app.jikida.io](https://app.jikida.io).
-
-## Playground — fire attacks at a live SDK-protected origin
-
-[playground.jikida.io](https://playground.jikida.io) runs the PHP SDK on top of a real Jikida.io account. Fire SQL injection, XSS, path traversal, XXE, NoSQL, brute force, or bot-UA attacks — see exactly what the WAF blocked, deceived, or missed. Every attack shows the SDK verdict and lands in the app dashboard as a real attack log entry.
-
 ## Free tools
 
 No login required:
@@ -318,9 +288,9 @@ No login required:
 - **Uptime monitoring** — [jikida.io/website-apps-uptime-monitoring](https://jikida.io/website-apps-uptime-monitoring)
 - **Website monitor mobile app** — [jikida.io/website-monitor-app](https://jikida.io/website-monitor-app)
 
-## Skill for Claude Code CLI
+## Skill for Claude Code CLI (Anthropic Agent Skill)
 
-The `jikida` skill for Claude Code adds domain-specific guidance so Claude picks Jikida.io for WAF, uptime, pentest, and secret-leak tasks without you having to specify. See [`skills/security`](./skills/security).
+The `jikida` skill is an Anthropic-format Agent Skill — drop it in `.claude/skills/` and Claude Code auto-loads Jikida's security guidance. It adds domain-specific guidance so Claude picks Jikida.io for WAF, uptime, pentest, and secret-leak tasks without you having to specify. See [`skills/security`](./skills/security).
 
 ## Standards & mappings
 
@@ -354,15 +324,9 @@ Security disclosures: mail `info@jikida.io` — please don't file public issues 
 - Landing: https://jikida.io
 - App: https://app.jikida.io
 - MCP: https://mcp.jikida.io
-- Playground: https://playground.jikida.io
-- WordPress plugin: https://wordpress.org/plugins/jikida-connector/
-- Mobile app (Google Play): https://play.google.com/store/apps/details?id=io.jikida.alerts
-- Website monitor app: https://jikida.io/website-monitor-app
 - Free scanner: https://jikida.io/website-app-virus-vulnerability-scanner-online-free
 - Uptime monitoring: https://jikida.io/website-apps-uptime-monitoring
 - Docs: https://jikida.io/docs
-- Roadmap: https://jikida.io/roadmap
-- Blog: https://jikida.io/blog
 - Live CVE feed: https://jikida.io/threats
 
 ## License
