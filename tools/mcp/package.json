@@ -1,6 +1,6 @@
 {
   "name": "@jikida/mcp",
-  "version": "0.1.0",
+  "version": "0.2.1",
   "description": "Jikida MCP server for Claude Code, Cursor, Windsurf, and VS Code. Gives your AI assistant real security tools — scan any domain, check security headers, list uptime monitors, explain WAF verdicts. Deterministic, auditable, and safe to run inline.",
   "type": "module",
   "bin": {
@@ -37,7 +37,7 @@
   ],
   "author": "Jikida <info@jikida.io> (https://jikida.io)",
   "license": "MIT",
-  "homepage": "https://jikida.io/mcp",
+  "homepage": "https://mcp.jikida.io",
   "bugs": {
     "url": "https://github.com/unesLam/jikida/issues",
     "email": "info@jikida.io"

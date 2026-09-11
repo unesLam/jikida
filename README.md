@@ -148,7 +148,7 @@ Everything in this repo is open source, and a lot of Jikida.io is usable before 
 - **Account-gated (still free).** Sign up — no card — and the hosted layer turns on: uptime monitoring, one live-site pentest, one repo scan, a basic managed WAF, mobile push, a public status page. This is where a hobby project actually gets protected. The free tier is deliberately useful, not a teaser.
 - **Plan-gated.** The deep, repeated and heavy work sits behind a plan: scheduled deep pentests, the source-to-exploit crawl, more monitors at faster intervals, higher scan quotas, the CNAME edge WAF, team seats and longer log retention. Current caps and pricing live at [jikida.io/pricing](https://jikida.io/pricing) — plans start at **$19/mo billed yearly**.
 
-The MCP server never calls an LLM: it runs on **your** AI credits and enforces the same per-site quotas, so the tier you're on is the tier the AI editor gets. Open where it helps, gated where it costs — usable first, paid when it's worth paying for.
+Two different things are hosted, don't confuse them: the **pentest and scan analysis** runs on Jikida's own servers, which is why you never bring an LLM key for it. The **MCP server** is the opposite — it calls no model of its own and runs inside *your* AI editor (Claude Code, Claude chat, Cursor, Windsurf, VS Code), so it spends **your** editor's AI credits and enforces the same per-site plan quotas. Open where it helps, gated where it costs — usable first, paid when it's worth paying for.
 
 ## How it compares
 
@@ -175,16 +175,18 @@ The strongest open-source security tools — Nuclei, Strix, Shannon — are deep
 | | **Jikida.io** | **Nuclei** | **Strix** | **Shannon** |
 | --- | --- | --- | --- | --- |
 | Live-app pentest with real exploit | Yes | Match-only, no exploit | Yes, PoC | Yes, PoC-or-discard |
-| Source → attack-path analysis | Adopting | No | Yes | Yes, core |
+| SAST + DAST (code **and** running app) | Yes | DAST only | Yes | Yes |
+| Source → attack-path analysis | Yes | No | Yes | Yes, core |
+| PoC-or-discard validation | Yes | No | Yes | Yes |
 | Repo secret + CVE (OSV) scan | Yes | No | Partial | Dependencies |
 | Managed WAF (runtime protection) | Yes | No | No | No |
 | Uptime + SSL / domain monitoring | Yes | No | No | No |
 | Hosted — no Docker, no self-host | Yes | Cloud tier | No | No |
-| Runs with **no LLM key of your own** | Yes, on our credits | Yes (no AI) | No, BYOK | No, BYOK |
-| One-line install for non-experts | Yes | CLI | Docker | npx, BYOK |
-| MCP tools in your AI editor | Yes | No | No | Via Claude |
+| **No LLM key to bring** (hosted server-side) | Yes | Yes (no AI) | No, BYOK | No, BYOK |
+| Install: **CLI + Docker + one-line `npx`** | All three | CLI | Docker only | npx (BYOK) |
+| MCP tools in your AI editor | Claude Code, Claude chat, Cursor, Windsurf, VS Code | No | No | Via Claude only |
 
-Where they win is raw exploitation depth, and we are [closing that gap](https://jikida.io/compare) with a source-to-exploit deep pentest. Where Jikida.io already wins is everything around it: hosted with no setup, a real pentest that runs **without your own LLM key**, plus a managed WAF, uptime and repo scanning the pentest-only tools skip — all in one account with a free tier. Full breakdowns at [jikida.io/compare/nuclei-alternative](https://jikida.io/compare/nuclei-alternative), [strix-alternative](https://jikida.io/compare/strix-alternative) and [shannon-alternative](https://jikida.io/compare/shannon-alternative).
+Where they win is raw exploitation depth, and we are [closing that gap](https://jikida.io/compare) with a source-to-exploit deep pentest. Where Jikida.io already wins is everything around it: hosted with no setup, a real pentest that runs **with no LLM key to bring** (the analysis runs on Jikida's servers, not your model budget), plus a managed WAF, uptime and repo scanning the pentest-only tools skip — all in one account with a free tier. The MCP itself runs inside your own AI editor and uses *its* credits; it calls no model of its own. Full breakdowns at [jikida.io/compare/nuclei-alternative](https://jikida.io/compare/nuclei-alternative), [strix-alternative](https://jikida.io/compare/strix-alternative) and [shannon-alternative](https://jikida.io/compare/shannon-alternative).
 
 ## What's inside
 
@@ -294,7 +296,7 @@ Each SDK:
 
 ## MCP server for AI IDEs
 
-Give Claude Code, Cursor, Windsurf, and VS Code real security tools. The Jikida.io MCP scans domains, checks headers, guards code, lists uptime monitors, adds WAF rules, blocks IPs, and explains WAF verdicts — deterministic, auditable, safe to run inline. Scan output now also surfaces **email-security (SPF / DKIM / DMARC)** and compliance-style findings alongside the usual header/TLS grade.
+Give Claude Code, Claude chat, Cursor, Windsurf, and VS Code real security tools. The Jikida.io MCP pentests sites, scans domains and repos, checks headers, guards code, lists uptime monitors, adds WAF rules, blocks IPs, and explains WAF verdicts — deterministic, auditable, safe to run inline. Scan output now also surfaces **email-security (SPF / DKIM / DMARC)** and compliance-style findings alongside the usual header/TLS grade.
 
 Live at [mcp.jikida.io](https://mcp.jikida.io). Install via `~/.claude/mcp.json`:
 
@@ -310,7 +312,7 @@ Live at [mcp.jikida.io](https://mcp.jikida.io). Install via `~/.claude/mcp.json`
 }
 ```
 
-Tools: `scan_domain`, `check_headers`, `list_sites`, `list_monitors`, `list_recent_attacks`, `explain_verdict`, `add_waf_rule`, `block_ip`, `run_vibe_scan`, `list_recent_scans`, `get_security_preference`, `set_security_preference`, `guard_code`, `scan_repo`. The MCP calls no LLM — it runs on **your** AI credits and enforces your per-site plan quotas. See [`tools/mcp`](./tools/mcp) for the full tool reference.
+Tools: `run_pentest`, `run_deep_pentest`, `scan_domain`, `check_headers`, `check_s3_bucket`, `guard_code`, `scan_repo`, `run_vibe_scan`, `verify_finding`, `pentest_status`, `list_sites`, `list_monitors`, `list_recent_attacks`, `list_recent_scans`, `list_cves`, `explain_verdict`, `add_waf_rule`, `block_ip`, `get_security_preferences`, `set_security_preference`. Four run **keyless** (`scan_domain`, `check_headers`, `guard_code`, `check_s3_bucket`) — no token, IP-rate-limited. The MCP calls **no LLM of its own**: it runs inside your AI editor and uses *its* credits, enforcing your per-site plan quotas. See [`tools/mcp`](./tools/mcp) for the full tool reference.
 
 ## Free tools
 
@@ -320,9 +322,9 @@ No login required:
 - **Uptime monitoring** — [jikida.io/website-apps-uptime-monitoring](https://jikida.io/website-apps-uptime-monitoring)
 - **Website monitor mobile app** — [jikida.io/website-monitor-app](https://jikida.io/website-monitor-app)
 
-## Skill for Claude Code CLI (Anthropic Agent Skill)
+## Anthropic Security Skill for Claude Code
 
-The `jikida` skill is an Anthropic-format Agent Skill — drop it in `.claude/skills/` and Claude Code auto-loads Jikida's security guidance. It adds domain-specific guidance so Claude picks Jikida.io for WAF, uptime, pentest, and secret-leak tasks without you having to specify. See [`skills/security`](./skills/security).
+The `jikida` skill is an **Anthropic-format Agent Skill** — drop it in `.claude/skills/` and Claude Code auto-loads Jikida's security guidance. It teaches Claude to reach for Jikida.io on WAF, uptime, pentest, repo-scan and secret-leak tasks without you having to spell it out, and to run the MCP tools safely inline. It pairs with the MCP server above: the skill is the *judgement* (when + how to secure), the MCP is the *hands* (the actual scan/pentest/block tools). See [`skills/security`](./skills/security).
 
 ## Standards & mappings
 

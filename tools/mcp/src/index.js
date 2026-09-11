@@ -64,15 +64,49 @@ const server = new Server(
  */
 const TOOLS = [
   {
-    name: 'scan_domain',
-    annotations: { title: 'Scan a domain (pentest)', readOnlyHint: true },
+    name: 'run_pentest',
+    annotations: { title: 'Run a website pentest', readOnlyHint: true },
     description: [
-      'Run a live surface pentest against a URL: TLS, HSTS, CSP, cookie flags, exposed .env/.git/backup files, leaked Supabase/Firebase/S3 keys, security headers. Returns a graded A-F report.',
+      'Run a live pentest against a URL: TLS/HSTS/CSP, cookie flags, exposed .env/.git/backup files, leaked Supabase/Firebase/S3 keys, source-map leaks and security headers. Returns a graded A-F report with a fix for each finding.',
       '',
-      'WORKS WITHOUT A TOKEN: with no JIKIDA_TOKEN it returns a free once-a-day teaser scan (grade + top findings) for any public URL — great for a first look. With a token + the site onboarded, it returns the full report saved to history.',
+      'WORKS WITHOUT A TOKEN: with no JIKIDA_TOKEN it returns a free once-a-day preview (grade + top findings) for any public URL. With a token + the site onboarded, it returns the full report saved to history.',
       '',
-      'WHEN TO USE: user asks to "audit", "pentest", "scan", or "check the security of" a specific URL and needs fresh live data. This tool actually reaches the target.',
-      'WHEN NOT TO USE: for general "how do I secure X" advice, answer with your own knowledge. If the user only wants headers, use check_headers (cheaper).',
+      'WHEN TO USE: user asks to "pentest", "audit", "scan", or "check the security of" a running site or app. This tool actually reaches the target.',
+      'WHEN NOT TO USE: for a GitHub repo (use scan_repo). For AI-editor code before deploy (use run_vibe_scan / guard_code).',
+    ].join('\n'),
+    inputSchema: {
+      type: 'object',
+      properties: {
+        url: { type: 'string', description: 'Full URL including scheme, e.g. https://example.com' },
+      },
+      required: ['url'],
+    },
+  },
+  {
+    name: 'run_deep_pentest',
+    annotations: { title: 'Run a deep pentest', readOnlyHint: true },
+    description: [
+      'Run the DEEP pentest pass on a URL you own: everything in run_pentest plus surface discovery, tech fingerprint, a safe error-based SQL-injection probe, admin/login-panel discovery and extra secret patterns. Returns the full graded report saved to history.',
+      '',
+      'REQUIRES A TOKEN + a plan that allows deep scans (the free/anonymous path returns the surface pentest instead). The server enforces the plan and per-account limits.',
+      '',
+      'WHEN TO USE: user asks for a "deep pentest", "full pentest", "thorough audit" of a site they own and has connected an account.',
+      'WHEN NOT TO USE: for a quick free look — use run_pentest.',
+    ].join('\n'),
+    inputSchema: {
+      type: 'object',
+      properties: {
+        url: { type: 'string', description: 'Full URL including scheme, e.g. https://example.com' },
+      },
+      required: ['url'],
+    },
+  },
+  {
+    // scan_domain stays as a stable alias of run_pentest for older configs.
+    name: 'scan_domain',
+    annotations: { title: 'Run a website pentest (alias of run_pentest)', readOnlyHint: true },
+    description: [
+      'Alias of run_pentest — a live pentest of a URL (TLS, headers, exposed files, leaked keys), graded A-F. Prefer run_pentest / run_deep_pentest by name.',
     ].join('\n'),
     inputSchema: {
       type: 'object',
@@ -391,14 +425,23 @@ function friendlyError(status, body) {
   return bits.join('\n');
 }
 
+// run_pentest / run_deep_pentest are the assistant-facing names for a live URL
+// pentest; both hit the same scan_domain endpoint. run_deep_pentest adds the
+// deep pass (authenticated, saved to history) and needs a token + a plan that
+// allows it — the server enforces that and degrades gracefully otherwise.
+const ENDPOINT_ALIAS = { run_pentest: 'scan_domain', run_deep_pentest: 'scan_domain' };
+const DEEP_TOOLS = new Set(['run_deep_pentest']);
+
 server.setRequestHandler(CallToolRequestSchema, async (req) => {
   const { name, arguments: args } = req.params;
+  const endpoint = ENDPOINT_ALIAS[name] || name;
+  const payload = DEEP_TOOLS.has(name) ? { ...(args ?? {}), depth: 'deep' } : (args ?? {});
 
   // Tools that need a real account (they read the user's sites/monitors/etc.)
   // still require a token. But scan_domain works keyless — the server returns a
   // free once-a-day teaser scan for any public URL — so we let it through even
   // with no token, and surface that value instead of a hard refusal.
-  const KEYLESS_OK = new Set(['scan_domain', 'guard_code', 'check_headers', 'check_s3_bucket']);
+  const KEYLESS_OK = new Set(['scan_domain', 'run_pentest', 'guard_code', 'check_headers', 'check_s3_bucket']);
   if (!TOKEN && !KEYLESS_OK.has(name)) {
     return {
       content: [{
@@ -416,14 +459,14 @@ server.setRequestHandler(CallToolRequestSchema, async (req) => {
   }
 
   try {
-    const response = await fetch(`${API_BASE}${API_PATH}/${name}`, {
+    const response = await fetch(`${API_BASE}${API_PATH}/${endpoint}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${TOKEN}`,
         'User-Agent': `@jikida/mcp/${VERSION}`,
       },
-      body: JSON.stringify(args ?? {}),
+      body: JSON.stringify(payload),
     });
 
     const body = await response.text();
