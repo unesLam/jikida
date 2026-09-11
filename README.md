@@ -272,7 +272,7 @@ Live at [mcp.jikida.io](https://mcp.jikida.io). Install via `~/.claude/mcp.json`
     "jikida": {
       "command": "npx",
       "args": ["-y", "@jikida/mcp"],
-      "env": { "JIKIDA_TOKEN": "df_live_..." }
+      "env": { "JIKIDA_TOKEN": "jk_live_..." }
     }
   }
 }

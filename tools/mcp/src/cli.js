@@ -228,7 +228,7 @@ function setupGuide() {
   console.log('           "jikida": {');
   console.log('             "command": "npx",');
   console.log('             "args": ["-y", "@jikida/mcp"],');
-  console.log('             "env": { "JIKIDA_TOKEN": "df_live_… (from step 1)" }');
+  console.log('             "env": { "JIKIDA_TOKEN": "jk_live_… (from step 1)" }');
   console.log('           }');
   console.log('         }');
   console.log('       }');

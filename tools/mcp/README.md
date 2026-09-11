@@ -74,7 +74,7 @@ npx -y @jikida/mcp
 jikida link
 ```
 
-Or set `JIKIDA_TOKEN=df_live_...` in your environment. Either works. Get a token at [app.jikida.io/developer](https://app.jikida.io/developer).
+Or set `JIKIDA_TOKEN=jk_live_...` in your environment. Either works. Get a token at [app.jikida.io/developer](https://app.jikida.io/developer).
 
 ## Wire it into your assistant
 
@@ -88,7 +88,7 @@ Add to `~/.claude/mcp.json`:
     "jikida": {
       "command": "npx",
       "args": ["-y", "@jikida/mcp"],
-      "env": { "JIKIDA_TOKEN": "df_live_..." }
+      "env": { "JIKIDA_TOKEN": "jk_live_..." }
     }
   }
 }

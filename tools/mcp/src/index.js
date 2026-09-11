@@ -12,7 +12,7 @@
  *
  * Wire into ~/.claude/mcp.json:
  *   { "mcpServers": { "jikida": { "command": "npx", "args": ["-y", "@jikida/mcp"],
- *     "env": { "JIKIDA_TOKEN": "df_live_..." } } } }
+ *     "env": { "JIKIDA_TOKEN": "jk_live_..." } } } }
  *
  * Don't have a token yet? Run `npx -y @jikida/mcp link` — opens a browser,
  * approve once, and the token is stored in ~/.jikida/config.json.
