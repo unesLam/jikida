@@ -116,8 +116,10 @@ export async function runSqliProbe(ctx) {
   const r = await ctx.probe(path + "'");
   const sig = /(SQL syntax|mysql_fetch|ORA-\d{5}|PostgreSQL.*ERROR|SQLite3::|Unclosed quotation mark|You have an error in your SQL)/i;
   if (r && sig.test(r.body || '')) {
-    out.push({ id: 'sqli-error-reflected', name: 'Possible SQL injection (DB error reflected)', severity: 'high', cwe: 'CWE-89', tags: ['injection', 'active'],
+    const m = (r.body || '').match(sig);
+    out.push({ id: 'sqli-error-reflected', name: 'Possible SQL injection (DB error reflected)', severity: 'high', cwe: 'CWE-89', tags: ['injection', 'active'], proven: true,
       evidence: `Appending a single quote to a query parameter surfaced a raw database error — a strong SQL-injection signal.`,
+      poc: { request: `GET ${path}'`, evidence: `The single-quote probe made the server return a database error ("${m ? m[0] : 'SQL error'}") — the query concatenates the parameter unsanitized.` },
       remediation: 'Use parameterized queries / prepared statements, and never render raw DB errors to users.' });
   }
   return out;

@@ -116,8 +116,13 @@ function printReport(report, o) {
 
   for (const f of report.findings) {
     const col = SEV_COLOR[f.severity] || '';
-    console.log(`${col} ${SEV_LABEL[f.severity]} ${C.x} ${C.bold}${f.name}${C.x}` + (f.cwe ? ` ${C.dim}${f.cwe}${C.x}` : ''));
+    const proven = f.proven ? ` ${C.red}${C.bold}PROVEN${C.x}` : '';
+    console.log(`${col} ${SEV_LABEL[f.severity]} ${C.x} ${C.bold}${f.name}${C.x}` + (f.cwe ? ` ${C.dim}${f.cwe}${C.x}` : '') + proven);
     console.log(`      ${f.evidence}`);
+    if (f.poc && f.poc.request) {
+      console.log(`      ${C.dim}poc${C.x} ${f.poc.request}`);
+      if (f.poc.evidence) console.log(`          ${C.dim}${f.poc.evidence}${C.x}`);
+    }
     if (f.remediation) console.log(`      ${C.g}fix${C.x} ${f.remediation}`);
     console.log('');
   }
@@ -148,8 +153,13 @@ function printRepoReport(report, o) {
   }
   for (const f of report.findings) {
     const col = SEV_COLOR[f.severity] || '';
-    console.log(`${col} ${SEV_LABEL[f.severity]} ${C.x} ${C.bold}${f.name}${C.x}` + (f.cwe ? ` ${C.dim}${f.cwe}${C.x}` : ''));
+    const proven = f.proven ? ` ${C.red}${C.bold}PROVEN${C.x}` : '';
+    console.log(`${col} ${SEV_LABEL[f.severity]} ${C.x} ${C.bold}${f.name}${C.x}` + (f.cwe ? ` ${C.dim}${f.cwe}${C.x}` : '') + proven);
     console.log(`      ${f.evidence}`);
+    if (f.poc && f.poc.request) {
+      console.log(`      ${C.dim}poc${C.x} ${f.poc.request}`);
+      if (f.poc.evidence) console.log(`          ${C.dim}${f.poc.evidence}${C.x}`);
+    }
     if (f.remediation) console.log(`      ${C.g}fix${C.x} ${f.remediation}`);
     console.log('');
   }

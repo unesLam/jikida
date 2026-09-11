@@ -12,7 +12,7 @@ import { runTemplates, runPathTemplates, TEMPLATE_COUNT } from './templates.js';
 import { runExtraSecretTemplates, runSurfaceTemplates, runSourcemapTemplate, runSqliProbe, techFingerprint, EXTRA_TEMPLATE_COUNT } from './templates-deep.js';
 import { runVersionCveTemplates, runTakeoverTemplate, runExposurePack, runGraphqlTemplate, runCorsTemplate, runOpenRedirectProbe, runReflectedXssProbe, runSstiProbe, runMixedContentTemplate } from './templates-deepchecks.js';
 
-const VERSION = '0.1.0';
+const VERSION = '0.2.0';
 const UA = `@jikida/scan/${VERSION}`;
 const SEV_ORDER = { info: 0, low: 1, medium: 2, high: 3, critical: 4 };
 
@@ -197,9 +197,20 @@ export async function scan(input, opts = {}) {
     }
   }
 
-  // Dedup by id (keep first/highest — already sorted after).
-  const seen = new Set();
-  findings = findings.filter((f) => { const k = f.id + '|' + (f.evidence || ''); if (seen.has(k)) return false; seen.add(k); return true; });
+  // Reconcile: collapse findings that share an id into one, keeping the more
+  // severe and preserving any proof-of-concept, so one weakness two checks both
+  // caught is reported once — not double-counted.
+  const byId = new Map();
+  for (const f of findings) {
+    const prev = byId.get(f.id);
+    if (!prev) { byId.set(f.id, f); continue; }
+    const winner = (SEV_ORDER[f.severity] ?? 0) > (SEV_ORDER[prev.severity] ?? 0) ? { ...f } : { ...prev };
+    winner.poc = winner.poc || f.poc || prev.poc;
+    winner.proven = winner.proven || f.proven || prev.proven;
+    winner.merged_from = (prev.merged_from || 1) + 1;
+    byId.set(f.id, winner);
+  }
+  findings = [...byId.values()];
   findings.sort((a, b) => (SEV_ORDER[b.severity] - SEV_ORDER[a.severity]) || a.id.localeCompare(b.id));
 
   const g = grade(findings);

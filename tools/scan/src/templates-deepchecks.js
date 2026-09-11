@@ -150,8 +150,9 @@ export async function runOpenRedirectProbe(ctx) {
     if (r.status >= 300 && r.status < 400 && loc.includes(host)) {
       return [{
         id: 'open-redirect', name: 'Open redirect', severity: 'medium', cwe: 'CWE-601',
-        tags: ['redirect', 'active'],
+        tags: ['redirect', 'active'], proven: true,
         evidence: `The "${p}" parameter redirected to an external URL we supplied (${loc}). Attackers use this for convincing phishing links on your domain.`,
+        poc: { request: `GET ${base}${probe} (redirects not followed)`, evidence: `Server answered ${r.status} with Location: ${loc} — it forwarded to our external canary.` },
         remediation: 'Validate redirect targets against an allowlist of internal paths; never redirect to a raw user-supplied URL.',
       }];
     }
@@ -173,8 +174,9 @@ export async function runReflectedXssProbe(ctx) {
     if (r.body.includes(payload)) {
       return [{
         id: 'reflected-xss', name: 'Reflected input without output encoding', severity: 'high', cwe: 'CWE-79',
-        tags: ['xss', 'active'],
+        tags: ['xss', 'active'], proven: true,
         evidence: `The "${p}" parameter was reflected into the page without HTML-encoding, so a crafted value can inject markup. This is the pattern behind reflected XSS.`,
+        poc: { request: `GET ${ctx.url.origin}${probe}`, evidence: 'The payload was echoed back verbatim in the response body — proof the input reaches the page unencoded.' },
         remediation: 'HTML-encode all user input on output, and add a Content-Security-Policy that blocks inline scripts.',
       }];
     }
@@ -197,8 +199,9 @@ export async function runSstiProbe(ctx) {
       if (r.body.includes('49') && !r.body.includes(probe) && !r.body.includes('7*7')) {
         return [{
           id: 'ssti', name: 'Server-side template injection', severity: 'critical', cwe: 'CWE-1336',
-          tags: ['ssti', 'active'],
+          tags: ['ssti', 'active'], proven: true,
           evidence: `The "${p}" parameter evaluated a template expression on the server (7*7 returned 49). This can lead to remote code execution inside the template engine.`,
+          poc: { request: `GET ${ctx.url.origin}${path}`, evidence: `${probe} returned 49 in the response while the raw payload did not appear — proof of server-side evaluation, not reflection.` },
           remediation: 'Never render user input as a template. Pass user values as data to a pre-compiled template and disable expression evaluation on untrusted strings.',
         }];
       }

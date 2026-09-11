@@ -28,13 +28,13 @@ export function toSarif(report) {
     results.push({
       ruleId: f.id,
       level: SEV_TO_LEVEL[f.severity] || 'note',
-      message: { text: `${f.name}: ${f.evidence}${f.remediation ? ' Fix: ' + f.remediation : ''}` },
+      message: { text: `${f.name}: ${f.evidence}${f.poc && f.poc.request ? ' PoC: ' + f.poc.request : ''}${f.remediation ? ' Fix: ' + f.remediation : ''}` },
       locations: [{
         physicalLocation: {
           artifactLocation: { uri: report.url },
         },
       }],
-      properties: { severity: f.severity, cwe: f.cwe },
+      properties: { severity: f.severity, cwe: f.cwe, proven: f.proven || false, poc: f.poc || null },
     });
   }
 
