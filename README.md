@@ -153,6 +153,7 @@ One dashboard for a site's whole security posture — protection status, uptime,
 - [How access works](#how-access-works--free-then-account-gated-then-plan-gated)
 - [What's inside](#whats-inside)
 - [Quick install](#quick-install-30-seconds)
+- [Security for your stack](#security-for-your-stack)
 - [SDKs — every language](#sdks--every-language)
 - [MCP server for AI IDEs](#mcp-server-for-ai-ides)
 - [Free tools](#free-tools)
@@ -261,6 +262,17 @@ Every SDK exposes the same `inspect(request) -> { action, rule, reason }` contra
 </details>
 
 ---
+
+## Security for your stack
+
+Same platform, framed for what you're building. Each links to the install for that stack:
+
+- **Security for AI-generated code** — the #1 thing Jikida catches: secrets, open buckets, RLS-off, and injection that AI editors ship. → [`@jikida/scan`](./tools/scan) + the [MCP server](#mcp-server-for-ai-ides) in your editor.
+- **Laravel / PHP security** — one middleware for the managed WAF + a repo scan for committed `.env` / keys. → [`jikida/sdk-php`](./sdks/php).
+- **Next.js / Node / Express security** — one-line middleware, fails open. → [`@jikida/sdk-node`](./sdks/node).
+- **Python (Django / FastAPI) security** — WAF middleware + secret + dependency (OSV) scan. → [`jikida` (Python)](./sdks/python).
+- **Go / Rust / Java / .NET security** — the same `inspect(request)` contract, one line to wire. → [`sdks/`](./sdks).
+- **Vibe-coded app security** — point it at your live URL + repo; it pentests and flags the insecure defaults. → [`npx @jikida/scan`](./tools/scan).
 
 ## SDKs — every language
 
