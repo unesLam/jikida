@@ -12,7 +12,7 @@ Pentest your live app, scan your repo, protect it with a WAF, and watch its upti
 <a href="#sdks--every-language"><img src="https://img.shields.io/badge/SDKs-10_languages-0A0A0A" alt="sdks"></a>
 <a href="https://www.npmjs.com/package/@jikida/scan"><img src="https://img.shields.io/npm/v/@jikida/scan?label=%40jikida%2Fscan&color=cb3837" alt="npm scan"></a>
 <a href="https://packagist.org/packages/jikida/sdk-php"><img src="https://img.shields.io/packagist/v/jikida/sdk-php?label=jikida%2Fsdk-php&color=777bb4" alt="packagist"></a>
-<a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-3b82f6" alt="license"></a>
+<a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache_2.0-3b82f6" alt="license"></a>
 </p>
 
 <p align="center">
@@ -361,4 +361,4 @@ Security disclosures: mail `info@jikida.io` — please don't file public issues 
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+Apache-2.0. See [LICENSE](LICENSE).
