@@ -116,6 +116,8 @@ One dashboard for a site's whole security posture — protection status, uptime,
 ## Table of contents
 
 - [Why Jikida.io](#why-jikida)
+- [How access works](#how-access-works--free-then-account-gated-then-plan-gated)
+- [How it compares](#how-it-compares)
 - [What's inside](#whats-inside)
 - [Quick install](#quick-install-30-seconds)
 - [SDKs — every language](#sdks--every-language)
@@ -138,9 +140,21 @@ Jikida.io removes three specific frictions:
 2. **Downside risk** — every SDK is fail-open. If Jikida.io is down, your app keeps serving. You lose protection, not availability.
 3. **Cost** — there's a real free tier that protects a hobby project. Plans and current pricing live at [jikida.io](https://jikida.io).
 
+## How access works — free, then account-gated, then plan-gated
+
+Everything in this repo is open source, and a lot of Jikida.io is usable before you ever sign up. The model is three tiers of friction, on purpose:
+
+- **Free, no account.** The SDKs, the WAF rule packs, the CLI scanner and four MCP tools (`scan_domain`, `check_headers`, `guard_code`, `check_s3_bucket`) run with no login at all — rate-limited by IP. You can protect an app or scan a URL in one command and never create an account. This is the open-source, try-it-now surface.
+- **Account-gated (still free).** Sign up — no card — and the hosted layer turns on: uptime monitoring, one live-site pentest, one repo scan, a basic managed WAF, mobile push, a public status page. This is where a hobby project actually gets protected. The free tier is deliberately useful, not a teaser.
+- **Plan-gated.** The deep, repeated and heavy work sits behind a plan: scheduled deep pentests, the source-to-exploit crawl, more monitors at faster intervals, higher scan quotas, the CNAME edge WAF, team seats and longer log retention. Current caps and pricing live at [jikida.io/pricing](https://jikida.io/pricing) — plans start at **$19/mo billed yearly**.
+
+The MCP server never calls an LLM: it runs on **your** AI credits and enforces the same per-site quotas, so the tier you're on is the tier the AI editor gets. Open where it helps, gated where it costs — usable first, paid when it's worth paying for.
+
 ## How it compares
 
-A quick, honest sketch of where Jikida.io sits next to tools you may already know. Each is good at what it does; Jikida.io bundles the app-layer pieces a small team would otherwise wire together.
+A quick, honest sketch of where Jikida.io sits next to tools you may already know. Each is genuinely good at what it does; Jikida.io bundles the app-layer pieces a small team would otherwise wire together, and hosts them so there is nothing to run yourself.
+
+**Against the platforms and CI scanners:**
 
 | | **Jikida.io** | **Cloudflare** | **Snyk** | **UptimeRobot** |
 | --- | --- | --- | --- | --- |
@@ -153,6 +167,24 @@ A quick, honest sketch of where Jikida.io sits next to tools you may already kno
 | Free tier | Yes | Yes | Yes | Yes |
 
 Runs happily *behind* Cloudflare, and complements a CI scanner like Snyk rather than replacing it.
+
+**Against the open-source scanners and AI pentesters:**
+
+The strongest open-source security tools — Nuclei, Strix, Shannon — are deep but narrow: pentest-only, and you self-host them. Nuclei is a template scanner you drive from the terminal. Strix and Shannon are autonomous AI pentesters that run real proof-of-concept exploits, but you host them (Strix in Docker) and bring your own LLM key. None of them protect anything at runtime.
+
+| | **Jikida.io** | **Nuclei** | **Strix** | **Shannon** |
+| --- | --- | --- | --- | --- |
+| Live-app pentest with real exploit | Yes | Match-only, no exploit | Yes, PoC | Yes, PoC-or-discard |
+| Source → attack-path analysis | Adopting | No | Yes | Yes, core |
+| Repo secret + CVE (OSV) scan | Yes | No | Partial | Dependencies |
+| Managed WAF (runtime protection) | Yes | No | No | No |
+| Uptime + SSL / domain monitoring | Yes | No | No | No |
+| Hosted — no Docker, no self-host | Yes | Cloud tier | No | No |
+| Runs with **no LLM key of your own** | Yes, on our credits | Yes (no AI) | No, BYOK | No, BYOK |
+| One-line install for non-experts | Yes | CLI | Docker | npx, BYOK |
+| MCP tools in your AI editor | Yes | No | No | Via Claude |
+
+Where they win is raw exploitation depth, and we are [closing that gap](https://jikida.io/compare) with a source-to-exploit deep pentest. Where Jikida.io already wins is everything around it: hosted with no setup, a real pentest that runs **without your own LLM key**, plus a managed WAF, uptime and repo scanning the pentest-only tools skip — all in one account with a free tier. Full breakdowns at [jikida.io/compare/nuclei-alternative](https://jikida.io/compare/nuclei-alternative), [strix-alternative](https://jikida.io/compare/strix-alternative) and [shannon-alternative](https://jikida.io/compare/shannon-alternative).
 
 ## What's inside
 
