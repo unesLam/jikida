@@ -16,6 +16,33 @@
 [![Google Play](https://img.shields.io/badge/Google%20Play-Jikida%20Alerts-34A853)](https://play.google.com/store/apps/details?id=io.jikida.alerts)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
+**Install it, scan it, or plug it into your AI editor:**
+
+```bash
+npx @jikida/init      # add the SDK + protection to your app in 30 seconds
+npx @jikida/scan      # pentest any site or repo from your terminal
+npx -y @jikida/mcp    # security tools inside Claude Code, Cursor, Windsurf
+```
+
+```text
+     ██ ██ ██  ██ ██ █████   ████
+     ██ ██ ██ ██  ██ ██  ██ ██  ██
+     ██ ██ ████   ██ ██  ██ ██████
+  ██ ██ ██ ██ ██  ██ ██  ██ ██  ██
+   ███  ██ ██  ██ ██ █████  ██  ██
+ pentest · repo scan · uptime · alerts        https://jikida.io
+
+ → scanning example.com …
+ ✓ 41 checks · grade B (88/100)
+
+   CRITICAL  Exposed .env file            /.env                 CWE-538
+   CRITICAL  Stripe secret key in JS      /app.js:1204          CWE-312
+   HIGH      Missing Content-Security-Policy                    CWE-693
+   MEDIUM    Cookie without Secure flag   session               CWE-614
+
+ Every finding has a fix. Full report: https://app.jikida.io
+```
+
 ## Pentest &amp; scan for developers, AI IDEs &amp; vibe coders
 
 Pentest and scan websites, web apps, code and GitHub for vulnerabilities and exposed keys. Secure vibe-coded apps, monitor uptime, SSL and domains, and rate-limit APIs. One platform.
