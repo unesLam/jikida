@@ -1,0 +1,20 @@
+{
+  "name": "@jikida/security-scan-action",
+  "version": "1.0.0",
+  "description": "GitHub Action that scans a repo or URL for secrets, vulnerable dependencies and risky config, with SARIF upload to the GitHub Security tab.",
+  "keywords": [
+    "github-action",
+    "security",
+    "sast",
+    "secrets",
+    "dependency-scanning",
+    "sarif",
+    "jikida"
+  ],
+  "homepage": "https://app.jikida.io",
+  "license": "MIT",
+  "files": [
+    "action.yml",
+    "README.md"
+  ]
+}

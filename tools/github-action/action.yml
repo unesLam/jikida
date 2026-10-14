@@ -1,0 +1,95 @@
+name: "Jikida Security Scan"
+description: "Scan your repository (or a live URL) for leaked secrets, vulnerable dependencies and risky config. SARIF results appear in the GitHub Security tab."
+author: "Jikida"
+branding:
+  icon: "shield"
+  color: "red"
+
+inputs:
+  target:
+    description: "What to scan: a path for the repo scan (e.g. '.') or a URL for a live web scan (e.g. 'https://example.com')."
+    required: false
+    default: "."
+  fail-on:
+    description: "Fail the job if a finding at or above this severity exists: info | low | medium | high | critical. Leave empty to never fail on findings."
+    required: false
+    default: ""
+  token:
+    description: "Optional JIKIDA_TOKEN. Not required for the offline repo scan; enables the hosted grade for URL scans."
+    required: false
+    default: ""
+  version:
+    description: "Version of @jikida/scan to run (default: latest)."
+    required: false
+    default: "latest"
+  upload-sarif:
+    description: "Upload the SARIF report to GitHub code scanning (shows findings in the Security tab + PR annotations). Needs 'security-events: write' permission."
+    required: false
+    default: "true"
+  extra-args:
+    description: "Extra flags passed through to the CLI (e.g. '--crawl 10 --active' for URL scans)."
+    required: false
+    default: ""
+
+outputs:
+  finding-count:
+    description: "Number of findings discovered (0 if clean)."
+    value: ${{ steps.scan.outputs.finding-count }}
+  grade:
+    description: "The letter grade for the scan (A–F), when available."
+    value: ${{ steps.scan.outputs.grade }}
+  sarif-file:
+    description: "Path to the generated SARIF file."
+    value: ${{ steps.scan.outputs.sarif-file }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Run Jikida Security Scan
+      id: scan
+      shell: bash
+      env:
+        JIKIDA_TOKEN: ${{ inputs.token }}
+      run: |
+        set -o pipefail
+        TARGET="${{ inputs.target }}"
+        SARIF_FILE="jikida-results.sarif"
+        JSON_FILE="jikida-results.json"
+
+        # Repo scan when the target is a path (not a URL); web scan otherwise.
+        if [[ "$TARGET" =~ ^https?:// ]]; then
+          SUBCMD=""        # URL scan: pass the target directly
+          SCOPE="$TARGET"
+        else
+          SUBCMD="repo"    # repo scan: `scan repo <path>`
+          SCOPE="$TARGET"
+        fi
+
+        echo "::group::Jikida scan ($TARGET)"
+        # JSON pass → finding count + grade (never fails the step here).
+        npx -y "@jikida/scan@${{ inputs.version }}" $SUBCMD "$SCOPE" ${{ inputs.extra-args }} --json > "$JSON_FILE" || true
+        # SARIF pass → for GitHub code scanning.
+        npx -y "@jikida/scan@${{ inputs.version }}" $SUBCMD "$SCOPE" ${{ inputs.extra-args }} --sarif > "$SARIF_FILE" 2>/dev/null || true
+        echo "::endgroup::"
+
+        # Parse count + grade from the JSON report (node is always present on runners).
+        COUNT=$(node -e "try{const r=JSON.parse(require('fs').readFileSync('$JSON_FILE','utf8'));const f=Array.isArray(r)?r.flatMap(x=>x.findings||[]):(r.findings||r.results||[]);console.log(f.length)}catch(e){console.log(0)}")
+        GRADE=$(node -e "try{const r=JSON.parse(require('fs').readFileSync('$JSON_FILE','utf8'));const o=Array.isArray(r)?r[0]||{}:r;console.log(o.grade||o.letter||'')}catch(e){console.log('')}")
+        echo "finding-count=$COUNT" >> "$GITHUB_OUTPUT"
+        echo "grade=$GRADE" >> "$GITHUB_OUTPUT"
+        echo "sarif-file=$SARIF_FILE" >> "$GITHUB_OUTPUT"
+        echo "Jikida found $COUNT finding(s)${GRADE:+, grade $GRADE}."
+
+        # Fail-on gate: re-run with --fail-on so the real CLI exit code decides.
+        if [ -n "${{ inputs.fail-on }}" ]; then
+          echo "Enforcing fail-on: ${{ inputs.fail-on }}"
+          npx -y "@jikida/scan@${{ inputs.version }}" $SUBCMD "$SCOPE" ${{ inputs.extra-args }} --fail-on "${{ inputs.fail-on }}" --quiet
+        fi
+
+    - name: Upload SARIF to code scanning
+      if: ${{ inputs.upload-sarif == 'true' && always() }}
+      continue-on-error: true
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: ${{ steps.scan.outputs.sarif-file }}
+        category: jikida-security-scan
