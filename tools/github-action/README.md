@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: unesLam/jikida/tools/github-action@main
+      - uses: unesLam/jikida/tools/github-action@v1
         with:
           target: "."          # repo scan of the checked-out tree
           fail-on: high        # fail the job on any high/critical finding
@@ -51,7 +51,7 @@ That's it — the action installs `@jikida/scan`, scans the repo, uploads SARIF,
 **Block a PR on secrets, gate at `high`:**
 
 ```yaml
-      - uses: unesLam/jikida/tools/github-action@main
+      - uses: unesLam/jikida/tools/github-action@v1
         with:
           fail-on: high
 ```
@@ -59,7 +59,7 @@ That's it — the action installs `@jikida/scan`, scans the repo, uploads SARIF,
 **Scan a deployed URL (with the hosted grade):**
 
 ```yaml
-      - uses: unesLam/jikida/tools/github-action@main
+      - uses: unesLam/jikida/tools/github-action@v1
         with:
           target: "https://staging.example.com"
           token: ${{ secrets.JIKIDA_TOKEN }}
@@ -70,7 +70,7 @@ That's it — the action installs `@jikida/scan`, scans the repo, uploads SARIF,
 
 ```yaml
       - id: scan
-        uses: unesLam/jikida/tools/github-action@main
+        uses: unesLam/jikida/tools/github-action@v1
       - run: echo "Jikida found ${{ steps.scan.outputs.finding-count }} issue(s), grade ${{ steps.scan.outputs.grade }}"
 ```
 
